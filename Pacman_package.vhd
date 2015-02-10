@@ -4,9 +4,11 @@ use ieee.std_logic_1164.all;
 
 package pacman_package is
 
+  -- Constants
   constant CELL_SIZE : positive := 10;
   constant MAP_COLUMNS : positive := 20;
   constant MAP_ROWS : positive := 20;
+  constant MAX_CANDIES : positive := 50;
 
   -- Map declarations
   type map_cell_type is record
@@ -30,5 +32,16 @@ package pacman_package is
     cell_character : character_type;
     coordinates : cell_coordinates;
   end record;
+
+  -- Coordinates at reset
+  constant PACMAN_RESET_POS : cell_coordinates := (    
+    col => 0,
+    row => 0
+  );
+
+  constant GHOSTS_RESET_POS : cell_coordinates := (
+    col => MAP_COLUMNS/2,
+    row => MAP_ROWS/2
+  );
 
 end package;
