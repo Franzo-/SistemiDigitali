@@ -22,11 +22,12 @@ end entity map_entity;
 
 architecture RTL of map_entity is
   signal map_board : map_type;
+  variable candy_removal : std_logic := '0';
 
 begin
 
-  MapCreation : process(RESET_N)
-
+  MapUpdate : process(CLOCK, RESET_N)
+    variable selected_cell : map_cell_type;    
   begin
 
     if (RESET_N = '0') then
@@ -37,9 +38,16 @@ begin
         end loop;
       end loop;
 
+    -- L'aggiornamento della mappa è sincrono con il clock di sistema  
+    elsif (rising_edge(CLOCK)) then
+      if (candy_removal = '1') then
+        selected_cell := map_board(REMOVE_CANDY.row, REMOVE_CANDY.col);
+        selected_cell.is_candy := '0';
+        map_board(REMOVE_CANDY.row, REMOVE_CANDY.col) <= selected_cell;
+        candy_removal := '0';
     end if;
 
-  end process MapCreation;
+  end process MapUpdate;
 
   
   QueryCell : process(QUERY_CELL, map_board)
@@ -55,13 +63,10 @@ begin
   end process QueryCell;
 
 
-  RemoveCandy : process(REMOVE_CANDY, map_board)
-    variable selected_cell : map_cell_type;
+  -- Segnala internamente al process sincrono di rimuovere la caramellina
+  RemoveCandy : process(REMOVE_CANDY)
   begin
-    selected_cell := map_board(REMOVE_CANDY.row, REMOVE_CANDY.col);
-    selected_cell.is_candy := '0';
-    map_board(REMOVE_CANDY.row, REMOVE_CANDY.col) <= selected_cell;
-
+    candy_removal := '1';
   end process RemoveCandy;
 
 end architecture;
