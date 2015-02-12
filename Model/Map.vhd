@@ -3,7 +3,7 @@ use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 use work.pacman_package.all;
 
-entity map_entity is
+entity MapEntity is
   port
     (
       CLOCK : in std_logic;
@@ -18,9 +18,9 @@ entity map_entity is
       
 );
   
-end entity map_entity;
+end entity MapEntity;
 
-architecture RTL of map_entity is
+architecture RTL of MapEntity is
   signal map_board : map_type;
   variable candy_removal : std_logic := '0';
 
@@ -45,6 +45,7 @@ begin
         selected_cell.is_candy := '0';
         map_board(REMOVE_CANDY.row, REMOVE_CANDY.col) <= selected_cell;
         candy_removal := '0';
+        end if;
     end if;
 
   end process MapUpdate;
