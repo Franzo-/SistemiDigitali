@@ -67,14 +67,33 @@ begin
 
 
   QueryController : process(QUERY_CONTROLLER, map_board)
-    variable selected_cell : map_cell_type;
+    
+  variable selected_cell_up : map_cell_type;
+  variable selected_cell_down : map_cell_type;
+  variable selected_cell_left : map_cell_type;
+  variable selected_cell_right : map_cell_type;
+	 
   begin
-    CELL_CONTENT.is_wall  <= '0';
-    CELL_CONTENT.is_candy <= '0';
-
-    selected_cell := map_board(QUERY_CELL.row, QUERY_CELL.col);
-
-    CELL_CONTENT <= selected_cell;
+  
+    RESPONSE_CONTROLLER.cell_up_content.is_wall <= '0';
+	 RESPONSE_CONTROLLER.cell_down_content.is_wall <= '0';
+	 RESPONSE_CONTROLLER.cell_left_content.is_wall <= '0';
+	 RESPONSE_CONTROLLER.cell_right_content.is_wall <= '0';
+	 
+    RESPONSE_CONTROLLER.cell_up_content.is_candy <= '0';
+	 RESPONSE_CONTROLLER.cell_down_content.is_candy <= '0';
+	 RESPONSE_CONTROLLER.cell_left_content.is_candy <= '0';
+	 RESPONSE_CONTROLLER.cell_right_content.is_candy <= '0';
+	 
+    selected_cell_up := map_board(QUERY_CONTROLLER.cell_up.row, QUERY_CONTROLLER.cell_up.col);
+	 selected_cell_down := map_board(QUERY_CONTROLLER.cell_down.row, QUERY_CONTROLLER.cell_down.col);
+	 selected_cell_left := map_board(QUERY_CONTROLLER.cell_left.row, QUERY_CONTROLLER.cell_left.col);
+	 selected_cell_right := map_board(QUERY_CONTROLLER.cell_right.row, QUERY_CONTROLLER.cell_right.col);
+	 
+	 RESPONSE_CONTROLLER.cell_up <= selected_cell_up;
+    RESPONSE_CONTROLLER.cell_down <= selected_cell_down;
+	 RESPONSE_CONTROLLER.cell_left <= selected_cell_left;
+	 RESPONSE_CONTROLLER.cell_right <= selected_cell_right;
 
   end process QueryController;
 
