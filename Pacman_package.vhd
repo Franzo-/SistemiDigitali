@@ -30,6 +30,13 @@ package pacman_package is
 	 cell_left : cell_coordinates;
 	 cell_right : cell_coordinates;
   end record
+  
+  type cell_nearby_content is record
+	 cell_up_content : map_cell_type;
+	 cell_down_content : map_cell_type;
+	 cell_left_content : map_cell_type;
+	 cell_right_content : map_cell_type;
+  end record
 
   type character_type is (PACMAN_CHAR, GHOST1_CHAR, GHOST2_CHAR, GHOST3_CHAR, GHOST4_CHAR);
   attribute enum_encoding  : string;

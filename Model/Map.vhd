@@ -10,8 +10,8 @@ entity MapEntity is
       RESET_N : in std_logic;
 
       -- Query sul contenuto delle celle
-      QUERY_CELL   : in  cell_coordinates;
-      CELL_CONTENT : out map_cell_type;
+      QUERY_CONTROLLER   : in  cell_nearby;
+      RESPONSE_CONTROLLER : out cell_nearby_content;
 
       -- Rimuove una caramellina su richiesta del controller
       REMOVE_CANDY         : in cell_coordinates;
@@ -66,7 +66,7 @@ begin
   end process MapUpdate;
 
 
-  QueryCell : process(QUERY_CELL, map_board)
+  QueryController : process(QUERY_CONTROLLER, map_board)
     variable selected_cell : map_cell_type;
   begin
     CELL_CONTENT.is_wall  <= '0';
@@ -76,7 +76,7 @@ begin
 
     CELL_CONTENT <= selected_cell;
 
-  end process QueryCell;
+  end process QueryController;
 
 
   -- Segnala internamente al process sincrono di rimuovere la caramellina
