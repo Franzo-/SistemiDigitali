@@ -10,8 +10,8 @@ entity MapEntity is
       RESET_N : in std_logic;
 
       -- Query sul contenuto delle celle
-      QUERY_CONTROLLER   : in  cell_nearby;
-      RESPONSE_CONTROLLER : out cell_nearby_content;
+      QUERY_NEARBY   : in  cell_nearby;
+      RESPONSE_NEARBY : out cell_nearby_content;
 
       -- Rimuove una caramellina su richiesta del controller
       REMOVE_CANDY         : in cell_coordinates;
@@ -66,7 +66,7 @@ begin
   end process MapUpdate;
 
 
-  QueryController : process(QUERY_CONTROLLER, map_board)
+  QueryNearby : process(QUERY_NEARBY, map_board)
     
   variable selected_cell_up : map_cell_type;
   variable selected_cell_down : map_cell_type;
@@ -75,27 +75,27 @@ begin
 	 
   begin
   
-    RESPONSE_CONTROLLER.cell_up_content.is_wall <= '0';
-	 RESPONSE_CONTROLLER.cell_down_content.is_wall <= '0';
-	 RESPONSE_CONTROLLER.cell_left_content.is_wall <= '0';
-	 RESPONSE_CONTROLLER.cell_right_content.is_wall <= '0';
+    RESPONSE_NEARBY.cell_up_content.is_wall <= '0';
+	 RESPONSE_NEARBY.cell_down_content.is_wall <= '0';
+	 RESPONSE_NEARBY.cell_left_content.is_wall <= '0';
+	 RESPONSE_NEARBY.cell_right_content.is_wall <= '0';
 	 
-    RESPONSE_CONTROLLER.cell_up_content.is_candy <= '0';
-	 RESPONSE_CONTROLLER.cell_down_content.is_candy <= '0';
-	 RESPONSE_CONTROLLER.cell_left_content.is_candy <= '0';
-	 RESPONSE_CONTROLLER.cell_right_content.is_candy <= '0';
+    RESPONSE_NEARBY.cell_up_content.is_candy <= '0';
+	 RESPONSE_NEARBY.cell_down_content.is_candy <= '0';
+	 RESPONSE_NEARBY.cell_left_content.is_candy <= '0';
+	 RESPONSE_NEARBY.cell_right_content.is_candy <= '0';
 	 
-    selected_cell_up := map_board(QUERY_CONTROLLER.cell_up.row, QUERY_CONTROLLER.cell_up.col);
-	 selected_cell_down := map_board(QUERY_CONTROLLER.cell_down.row, QUERY_CONTROLLER.cell_down.col);
-	 selected_cell_left := map_board(QUERY_CONTROLLER.cell_left.row, QUERY_CONTROLLER.cell_left.col);
-	 selected_cell_right := map_board(QUERY_CONTROLLER.cell_right.row, QUERY_CONTROLLER.cell_right.col);
+    selected_cell_up := map_board(QUERY_NEARBY.cell_up.row, QUERY_NEARBY.cell_up.col);
+	 selected_cell_down := map_board(QUERY_NEARBY.cell_down.row, QUERY_NEARBY.cell_down.col);
+	 selected_cell_left := map_board(QUERY_NEARBY.cell_left.row, QUERY_NEARBY.cell_left.col);
+	 selected_cell_right := map_board(QUERY_NEARBY.cell_right.row, QUERY_NEARBY.cell_right.col);
 	 
-	 RESPONSE_CONTROLLER.cell_up <= selected_cell_up;
-    RESPONSE_CONTROLLER.cell_down <= selected_cell_down;
-	 RESPONSE_CONTROLLER.cell_left <= selected_cell_left;
-	 RESPONSE_CONTROLLER.cell_right <= selected_cell_right;
+	 RESPONSE_NEARBY.cell_up <= selected_cell_up;
+    RESPONSE_NEARBY.cell_down <= selected_cell_down;
+	 RESPONSE_NEARBY.cell_left <= selected_cell_left;
+	 RESPONSE_NEARBY.cell_right <= selected_cell_right;
 
-  end process QueryController;
+  end process QueryNearby;
 
 
   -- Segnala internamente al process sincrono di rimuovere la caramellina
