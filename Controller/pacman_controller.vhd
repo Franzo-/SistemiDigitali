@@ -8,7 +8,6 @@ entity Pacman_controller is
   port
     (
       CLOCK   : in std_logic;
-      CAN_MOVE : in std_logic;
       RESET_N : in std_logic;
 
       --segnali dei tasti direzionali
