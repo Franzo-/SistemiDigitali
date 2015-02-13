@@ -6,20 +6,13 @@ use work.pacman_package.all;
 entity MapEntity is
   port
     (
-      CLOCK   : in std_logic;
-      RESET_N : in std_logic;
-
-      -- Query sul contenuto delle celle
-      QUERY_NEARBY   : in  cell_nearby;
+      CLOCK           : in  std_logic;
+      RESET_N         : in  std_logic;
+      QUERY_NEARBY    : in  cell_nearby;
+      REMOVE_CANDY    : in  cell_coordinates;
+      --
       RESPONSE_NEARBY : out cell_nearby_content;
-
-      -- Rimuove una caramellina su richiesta del controller
-      REMOVE_CANDY         : in cell_coordinates;
-      UPDATE_CANDY_COUNTER : in std_logic;
-
-      -- Valori del contatore di caramelline
-      CANDY_LEFT : out integer range 0 to (MAX_CANDIES-1);
-      SCORE      : out integer range 0 to (MAX_CANDIES-1)
+      CANDY_LEFT      : out integer range 0 to (MAX_CANDIES-1)
       );
 
 end entity MapEntity;
@@ -32,11 +25,10 @@ begin
 
   CandyCounter : entity work.CandyCounter
     port map (
-      RESET_N => RESET_N;
-      CLK     => CLOCK;
-      ENABLE  => UPDATE_CANDY_COUNTER;
-      COUNT   => CANDY_LEFT;
-      SCORE   => SCORE
+      RESET_N => RESET_N,
+      CLK     => CLOCK,
+      ENABLE  => candy_removal,
+      COUNT   => CANDY_LEFT
       );
 
   MapUpdate : process(CLOCK, RESET_N)
@@ -67,33 +59,33 @@ begin
 
 
   QueryNearby : process(QUERY_NEARBY, map_board)
-    
-  variable selected_cell_up : map_cell_type;
-  variable selected_cell_down : map_cell_type;
-  variable selected_cell_left : map_cell_type;
-  variable selected_cell_right : map_cell_type;
-	 
+
+    variable selected_cell_up    : map_cell_type;
+    variable selected_cell_down  : map_cell_type;
+    variable selected_cell_left  : map_cell_type;
+    variable selected_cell_right : map_cell_type;
+
   begin
-  
-    RESPONSE_NEARBY.cell_up_content.is_wall <= '0';
-	 RESPONSE_NEARBY.cell_down_content.is_wall <= '0';
-	 RESPONSE_NEARBY.cell_left_content.is_wall <= '0';
-	 RESPONSE_NEARBY.cell_right_content.is_wall <= '0';
-	 
-    RESPONSE_NEARBY.cell_up_content.is_candy <= '0';
-	 RESPONSE_NEARBY.cell_down_content.is_candy <= '0';
-	 RESPONSE_NEARBY.cell_left_content.is_candy <= '0';
-	 RESPONSE_NEARBY.cell_right_content.is_candy <= '0';
-	 
-    selected_cell_up := map_board(QUERY_NEARBY.cell_up.row, QUERY_NEARBY.cell_up.col);
-	 selected_cell_down := map_board(QUERY_NEARBY.cell_down.row, QUERY_NEARBY.cell_down.col);
-	 selected_cell_left := map_board(QUERY_NEARBY.cell_left.row, QUERY_NEARBY.cell_left.col);
-	 selected_cell_right := map_board(QUERY_NEARBY.cell_right.row, QUERY_NEARBY.cell_right.col);
-	 
-	 RESPONSE_NEARBY.cell_up <= selected_cell_up;
-    RESPONSE_NEARBY.cell_down <= selected_cell_down;
-	 RESPONSE_NEARBY.cell_left <= selected_cell_left;
-	 RESPONSE_NEARBY.cell_right <= selected_cell_right;
+
+    RESPONSE_NEARBY.cell_up_content.is_wall    <= '0';
+    RESPONSE_NEARBY.cell_down_content.is_wall  <= '0';
+    RESPONSE_NEARBY.cell_left_content.is_wall  <= '0';
+    RESPONSE_NEARBY.cell_right_content.is_wall <= '0';
+
+    RESPONSE_NEARBY.cell_up_content.is_candy    <= '0';
+    RESPONSE_NEARBY.cell_down_content.is_candy  <= '0';
+    RESPONSE_NEARBY.cell_left_content.is_candy  <= '0';
+    RESPONSE_NEARBY.cell_right_content.is_candy <= '0';
+
+    selected_cell_up    := map_board(QUERY_NEARBY.cell_up.row, QUERY_NEARBY.cell_up.col);
+    selected_cell_down  := map_board(QUERY_NEARBY.cell_down.row, QUERY_NEARBY.cell_down.col);
+    selected_cell_left  := map_board(QUERY_NEARBY.cell_left.row, QUERY_NEARBY.cell_left.col);
+    selected_cell_right := map_board(QUERY_NEARBY.cell_right.row, QUERY_NEARBY.cell_right.col);
+
+    RESPONSE_NEARBY.cell_up    <= selected_cell_up;
+    RESPONSE_NEARBY.cell_down  <= selected_cell_down;
+    RESPONSE_NEARBY.cell_left  <= selected_cell_left;
+    RESPONSE_NEARBY.cell_right <= selected_cell_right;
 
   end process QueryNearby;
 
