@@ -50,6 +50,7 @@ set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VHDL_FILE Controller/Pacman_controller.vhd
 set_global_assignment -name VHDL_FILE Controller/Collision_detection.vhd
 set_global_assignment -name VHDL_FILE Model/Candy_counter.vhd
 set_global_assignment -name VHDL_FILE Pacman_package.vhd
