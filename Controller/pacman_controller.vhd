@@ -33,6 +33,10 @@ entity Pacman_controller is
 
 end entity Pacman_controller;
 
+architecture my_pacman_controller of pacman_controller is
+--eventuali variabili
+
+
 begin 
 Pacman_controller : process(CLOCK,RESET_N)
 begin
@@ -67,7 +71,7 @@ begin
 	end if;
 end process;
 
---prova bla bl abadadsadas
+end architecture;
 
 		
 	
