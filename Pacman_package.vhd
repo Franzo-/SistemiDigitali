@@ -24,7 +24,7 @@ package pacman_package is
     row : integer range 0 to (MAP_ROWS-1);
   end record;
 
-  type character_type is (PACMAN_CHAR, GHOST_CHAR);
+  type character_type is (PACMAN_CHAR, GHOST1_CHAR, GHOST2_CHAR, GHOST3_CHAR, GHOST4_CHAR);
   attribute enum_encoding  : string;
   attribute enum_encoding  of character_type : type is "one-hot";
 
