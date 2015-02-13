@@ -23,6 +23,13 @@ package pacman_package is
     col : integer range 0 to (MAP_COLUMNS-1);
     row : integer range 0 to (MAP_ROWS-1);
   end record;
+  
+  type cell_nearby is record
+	 cell_up : cell_coordinates;
+	 cell_down : cell_coordinates;
+	 cell_left : cell_coordinates;
+	 cell_right : cell_coordinates;
+  end record
 
   type character_type is (PACMAN_CHAR, GHOST1_CHAR, GHOST2_CHAR, GHOST3_CHAR, GHOST4_CHAR);
   attribute enum_encoding  : string;
