@@ -82,10 +82,10 @@ begin
     selected_cell_left  := map_board(QUERY_NEARBY.cell_left.row, QUERY_NEARBY.cell_left.col);
     selected_cell_right := map_board(QUERY_NEARBY.cell_right.row, QUERY_NEARBY.cell_right.col);
 
-    RESPONSE_NEARBY.cell_up    <= selected_cell_up;
-    RESPONSE_NEARBY.cell_down  <= selected_cell_down;
-    RESPONSE_NEARBY.cell_left  <= selected_cell_left;
-    RESPONSE_NEARBY.cell_right <= selected_cell_right;
+    RESPONSE_NEARBY.cell_up_content    <= selected_cell_up;
+    RESPONSE_NEARBY.cell_down_content  <= selected_cell_down;
+    RESPONSE_NEARBY.cell_left_content  <= selected_cell_left;
+    RESPONSE_NEARBY.cell_right_content <= selected_cell_right;
 
   end process QueryNearby;
 
