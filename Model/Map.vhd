@@ -9,9 +9,13 @@ entity MapEntity is
       CLOCK           : in  std_logic;
       RESET_N         : in  std_logic;
       QUERY_NEARBY    : in  cell_nearby_array;
+      QUERY_CANDY : in cell_coordinates;
+      QUERY_VIEW : in cell_coordinates;
       REMOVE_CANDY    : in  cell_coordinates;
       --
       RESPONSE_NEARBY : out cell_nearby_content_array;
+      RESPONSE_CANDY : out map_cell_type;
+      RESPONSE_VIEW : out map_cell_type;
       CANDY_LEFT      : out integer range 0 to (MAX_CANDIES-1)
       );
 
@@ -23,6 +27,7 @@ architecture RTL of MapEntity is
 
 begin
 
+  -- La logica del contatore è in un componente interno
   CandyCounter : entity work.CandyCounter
     port map (
       RESET_N => RESET_N,
@@ -78,6 +83,14 @@ begin
 
   -----------------------------------------------------------------------------
 
+  -- Risposta a query su singola cella
+  SingleCellQuery: process (QUERY_CANDY, QUERY_VIEW) is
+  begin
+    RESPONSE_CANDY <= map_board(QUERY_CANDY.row, QUERY_CANDY.col);
+    RESPONSE_VIEW <=  map_board(QUERY_VIEW.row, QUERY_VIEW.col);
+  end process SingleCellQuery;
+
+  -----------------------------------------------------------------------------
 
   -- Segnala internamente al process sincrono di rimuovere la caramellina
   RemoveCandy : process(REMOVE_CANDY)

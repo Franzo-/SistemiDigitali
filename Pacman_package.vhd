@@ -18,7 +18,7 @@ package pacman_package is
     is_candy : std_logic;
   end record;
 
-  type map_type is array(0 to (MAP_COLUMNS-1), 0 to (MAP_ROWS-1)) of map_cell_type;
+  type map_type is array(0 to (MAP_ROWS-1), 0 to (MAP_COLUMNS-1)) of map_cell_type;
 
   -----------------------------------------------------------------------------
 
