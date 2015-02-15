@@ -60,32 +60,12 @@ begin
 
   QueryNearby : process(QUERY_NEARBY, map_board)
 
-    variable selected_cell_up    : map_cell_type;
-    variable selected_cell_down  : map_cell_type;
-    variable selected_cell_left  : map_cell_type;
-    variable selected_cell_right : map_cell_type;
-
   begin
 
-    RESPONSE_NEARBY.cell_up_content.is_wall    <= '0';
-    RESPONSE_NEARBY.cell_down_content.is_wall  <= '0';
-    RESPONSE_NEARBY.cell_left_content.is_wall  <= '0';
-    RESPONSE_NEARBY.cell_right_content.is_wall <= '0';
-
-    RESPONSE_NEARBY.cell_up_content.is_candy    <= '0';
-    RESPONSE_NEARBY.cell_down_content.is_candy  <= '0';
-    RESPONSE_NEARBY.cell_left_content.is_candy  <= '0';
-    RESPONSE_NEARBY.cell_right_content.is_candy <= '0';
-
-    selected_cell_up    := map_board(QUERY_NEARBY.cell_up.row, QUERY_NEARBY.cell_up.col);
-    selected_cell_down  := map_board(QUERY_NEARBY.cell_down.row, QUERY_NEARBY.cell_down.col);
-    selected_cell_left  := map_board(QUERY_NEARBY.cell_left.row, QUERY_NEARBY.cell_left.col);
-    selected_cell_right := map_board(QUERY_NEARBY.cell_right.row, QUERY_NEARBY.cell_right.col);
-
-    RESPONSE_NEARBY.cell_up_content    <= selected_cell_up;
-    RESPONSE_NEARBY.cell_down_content  <= selected_cell_down;
-    RESPONSE_NEARBY.cell_left_content  <= selected_cell_left;
-    RESPONSE_NEARBY.cell_right_content <= selected_cell_right;
+    RESPONSE_NEARBY.cell_up_content    <= map_board(QUERY_NEARBY.cell_up.row, QUERY_NEARBY.cell_up.col);
+    RESPONSE_NEARBY.cell_down_content  <= map_board(QUERY_NEARBY.cell_down.row, QUERY_NEARBY.cell_down.col);
+    RESPONSE_NEARBY.cell_left_content  <= map_board(QUERY_NEARBY.cell_left.row, QUERY_NEARBY.cell_left.col);
+    RESPONSE_NEARBY.cell_right_content <= map_board(QUERY_NEARBY.cell_right.row, QUERY_NEARBY.cell_right.col);
 
   end process QueryNearby;
 
