@@ -8,10 +8,10 @@ entity MapEntity is
     (
       CLOCK           : in  std_logic;
       RESET_N         : in  std_logic;
-      QUERY_NEARBY    : in  cell_nearby;
+      QUERY_NEARBY    : in  cell_nearby_array;
       REMOVE_CANDY    : in  cell_coordinates;
       --
-      RESPONSE_NEARBY : out cell_nearby_content;
+      RESPONSE_NEARBY : out cell_nearby_content_array;
       CANDY_LEFT      : out integer range 0 to (MAX_CANDIES-1)
       );
 
@@ -30,6 +30,8 @@ begin
       ENABLE  => candy_removal,
       COUNT   => CANDY_LEFT
       );
+
+  -----------------------------------------------------------------------------
 
   MapUpdate : process(CLOCK, RESET_N)
     variable selected_cell : map_cell_type;
@@ -57,17 +59,24 @@ begin
 
   end process MapUpdate;
 
+  -----------------------------------------------------------------------------
 
+  -- Aggiorna per tutti i personaggi
   QueryNearby : process(QUERY_NEARBY, map_board)
-
   begin
 
-    RESPONSE_NEARBY.cell_up_content    <= map_board(QUERY_NEARBY.cell_up.row, QUERY_NEARBY.cell_up.col);
-    RESPONSE_NEARBY.cell_down_content  <= map_board(QUERY_NEARBY.cell_down.row, QUERY_NEARBY.cell_down.col);
-    RESPONSE_NEARBY.cell_left_content  <= map_board(QUERY_NEARBY.cell_left.row, QUERY_NEARBY.cell_left.col);
-    RESPONSE_NEARBY.cell_right_content <= map_board(QUERY_NEARBY.cell_right.row, QUERY_NEARBY.cell_right.col);
+    eachCharacter : for character in QUERY_NEARBY'range loop
+
+      RESPONSE_NEARBY(character).cell_up_content    <= map_board(QUERY_NEARBY(character).cell_up.row, QUERY_NEARBY(character).cell_up.col);
+      RESPONSE_NEARBY(character).cell_down_content  <= map_board(QUERY_NEARBY(character).cell_down.row, QUERY_NEARBY(character).cell_down.col);
+      RESPONSE_NEARBY(character).cell_left_content  <= map_board(QUERY_NEARBY(character).cell_left.row, QUERY_NEARBY(character).cell_left.col);
+      RESPONSE_NEARBY(character).cell_right_content <= map_board(QUERY_NEARBY(character).cell_right.row, QUERY_NEARBY(character).cell_right.col);
+
+    end loop eachCharacter;
 
   end process QueryNearby;
+
+  -----------------------------------------------------------------------------
 
 
   -- Segnala internamente al process sincrono di rimuovere la caramellina
