@@ -75,12 +75,12 @@ begin
   -----------------------------------------------------------------------------
 
   -- Aggiorna per tutti i personaggi con statements concorrenti
-  eachCharacter : for character in QUERY_NEARBY'range generate
+  eachCharacter : for i in QUERY_NEARBY'range generate
 
-    RESPONSE_NEARBY(character).cell_up_content    <= map_board(QUERY_NEARBY(character).cell_up.row, QUERY_NEARBY(character).cell_up.col);
-    RESPONSE_NEARBY(character).cell_down_content  <= map_board(QUERY_NEARBY(character).cell_down.row, QUERY_NEARBY(character).cell_down.col);
-    RESPONSE_NEARBY(character).cell_left_content  <= map_board(QUERY_NEARBY(character).cell_left.row, QUERY_NEARBY(character).cell_left.col);
-    RESPONSE_NEARBY(character).cell_right_content <= map_board(QUERY_NEARBY(character).cell_right.row, QUERY_NEARBY(character).cell_right.col);
+    RESPONSE_NEARBY(i).cell_up_content    <= map_board(QUERY_NEARBY(i).cell_up.row, QUERY_NEARBY(i).cell_up.col);
+    RESPONSE_NEARBY(i).cell_down_content  <= map_board(QUERY_NEARBY(i).cell_down.row, QUERY_NEARBY(i).cell_down.col);
+    RESPONSE_NEARBY(i).cell_left_content  <= map_board(QUERY_NEARBY(i).cell_left.row, QUERY_NEARBY(i).cell_left.col);
+    RESPONSE_NEARBY(i).cell_right_content <= map_board(QUERY_NEARBY(i).cell_right.row, QUERY_NEARBY(i).cell_right.col);
 
   end generate eachCharacter;
 
