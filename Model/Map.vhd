@@ -48,7 +48,28 @@ begin
 
       for i in 0 to MAP_ROWS-1 loop
         for j in 0 to MAP_COLUMNS-1 loop
-        -- TODO: logica incredibile per creazione mappa
+		  		
+				selected_cell := map_board(i,j);
+
+				if ((i = 0) or (j =0) or (i = (MAP_ROWS -1)) or (j = (MAP_COLUMNS - 1))) then
+					selected_cell.is_candy := '0';
+					selected_cell.is_wall := '1';
+
+				elsif((i-1) mod 4 = 0 ) then
+					selected_cell.is_candy := '1';
+					selected_cell.is_wall := '0';
+
+				elsif((j-1) mod 4 = 0) then 
+					selected_cell.is_candy := '1';
+					selected_cell.is_wall := '0';
+
+				else
+					selected_cell.is_candy := '0';
+					selected_cell.is_wall := '1';
+					
+				end if;
+
+					map_board(i, j) <= selected_cell;
         end loop;
       end loop;
 
