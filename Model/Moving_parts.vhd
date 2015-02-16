@@ -29,7 +29,7 @@ begin
       ResetLoop : for i in characters_cells'range loop
 
         -- Assegna l'enumerativo a seconda del valore dell'indice i
-        character_cells(i).cell_character <= character_type'val(i);
+        characters_cells(i).cell_character <= character_type'val(i);
 
         CoordinatesReset : if (characters_cells(i).cell_character = PACMAN_CHAR) then
           characters_cells(i).coordinates <= PACMAN_RESET_POS;
@@ -52,7 +52,7 @@ begin
 
     next_characters_cells <= characters_cells;
 
-    eachCharacter : for i in character_cells'range loop
+    eachCharacter : for i in characters_cells'range loop
       if (MOVE_COMMANDS(i).move_up = '1') then
         next_characters_cells(i).coordinates.row <= characters_cells(i).coordinates.row - 1;
       elsif (MOVE_COMMANDS(i).move_down = '1') then
