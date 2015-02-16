@@ -77,6 +77,16 @@ package pacman_package is
   type move_commands_array is array (0 to (NUMBER_OF_CHARACTERS-1)) of move_commands;
 
   -----------------------------------------------------------------------------
+  
+  -- Segnali di can_move raggruppati
+  type can_move is record 
+    can_move_up    : std_logic;
+	 can_move_down  : std_logic;
+	 can_move_right : std_logic;
+	 can_move_left  : std_logic;
+  end record can_move;
+  
+  ------------------------------------------------------------------------------
 
   -- Coordinates at reset
   constant PACMAN_RESET_POS : cell_coordinates := (

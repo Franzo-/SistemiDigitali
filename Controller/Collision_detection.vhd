@@ -11,11 +11,8 @@ entity CollisionDetection is
 
     -- Output
     QUERY          : out cell_nearby;
-    CAN_MOVE_UP    : out std_logic;
-    CAN_MOVE_DOWN  : out std_logic;
-    CAN_MOVE_LEFT  : out std_logic;
-    CAN_MOVE_RIGHT : out std_logic
-
+	 CAN_MOVES      : out can_move
+	 
     );
 end CollisionDetection;
 
@@ -26,33 +23,34 @@ begin
   ResponseChanged : process (RESPONSE)
   begin
 
-    CAN_MOVE_UP    <= '1';
-    CAN_MOVE_DOWN  <= '1';
-    CAN_MOVE_LEFT  <= '1';
-    CAN_MOVE_RIGHT <= '1';
-
+    CAN_MOVES.can_move_up <= '1';
+	 CAN_MOVES.can_move_down <= '1';
+	 CAN_MOVES.can_move_left <= '1';
+	 CAN_MOVES.can_move_right <= '1';
+	 
+    
     if(RESPONSE.cell_up_content.is_wall = '1') then
-      CAN_MOVE_UP <= '0';
+      CAN_MOVES.can_move_up <= '0';
     else
-      CAN_MOVE_UP <= '1';
+      CAN_MOVES.can_move_up <= '1';
     end if;
 
     if(RESPONSE.cell_down_content.is_wall = '1') then
-      CAN_MOVE_DOWN <= '0';
+      CAN_MOVES.can_move_down <= '0';
     else
-      CAN_MOVE_DOWN <= '1';
+      CAN_MOVES.can_move_down <= '1';
     end if;
 
     if(RESPONSE.cell_left_content.is_wall = '1') then
-      CAN_MOVE_LEFT <= '0';
+      CAN_MOVES.can_move_left <= '0';
     else
-      CAN_MOVE_LEFT <= '1';
+      CAN_MOVES.can_move_left <= '1';
     end if;
 
     if(RESPONSE.cell_right_content.is_wall = '1') then
-      CAN_MOVE_RIGHT <= '0';
+      CAN_MOVES.can_move_right <= '0';
     else
-      CAN_MOVE_RIGHT <= '1';
+      CAN_MOVES.can_move_right <= '1';
     end if;
 
   end process ResponseChanged;
