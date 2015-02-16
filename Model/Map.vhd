@@ -9,12 +9,10 @@ entity MapEntity is
       CLOCK           : in  std_logic;
       RESET_N         : in  std_logic;
       QUERY_NEARBY    : in  cell_nearby_array;
-      QUERY_CANDY     : in  cell_coordinates;
       QUERY_VIEW      : in  cell_coordinates;
       REMOVE_CANDY    : in  cell_coordinates;
       --
       RESPONSE_NEARBY : out cell_nearby_content_array;
-      RESPONSE_CANDY  : out map_cell_type;
       RESPONSE_VIEW   : out map_cell_type;
       CANDY_LEFT      : out integer range 0 to (MAX_CANDIES-1)
       );
@@ -48,28 +46,28 @@ begin
 
       for i in 0 to MAP_ROWS-1 loop
         for j in 0 to MAP_COLUMNS-1 loop
-		  		
-				selected_cell := map_board(i,j);
 
-				if ((i = 0) or (j =0) or (i = (MAP_ROWS -1)) or (j = (MAP_COLUMNS - 1))) then
-					selected_cell.is_candy := '0';
-					selected_cell.is_wall := '1';
+          selected_cell := map_board(i, j);
 
-				elsif((i-1) mod 4 = 0 ) then
-					selected_cell.is_candy := '1';
-					selected_cell.is_wall := '0';
+          if ((i = 0) or (j = 0) or (i = (MAP_ROWS -1)) or (j = (MAP_COLUMNS - 1))) then
+            selected_cell.is_candy := '0';
+            selected_cell.is_wall  := '1';
 
-				elsif((j-1) mod 4 = 0) then 
-					selected_cell.is_candy := '1';
-					selected_cell.is_wall := '0';
+          elsif((i-1) mod 4 = 0) then
+            selected_cell.is_candy := '1';
+            selected_cell.is_wall  := '0';
 
-				else
-					selected_cell.is_candy := '0';
-					selected_cell.is_wall := '1';
-					
-				end if;
+          elsif((j-1) mod 4 = 0) then
+            selected_cell.is_candy := '1';
+            selected_cell.is_wall  := '0';
 
-					map_board(i, j) <= selected_cell;
+          else
+            selected_cell.is_candy := '0';
+            selected_cell.is_wall  := '1';
+
+          end if;
+
+          map_board(i, j) <= selected_cell;
         end loop;
       end loop;
 
@@ -107,9 +105,8 @@ begin
 
   -----------------------------------------------------------------------------
 
-  -- Risposta a query su singola cella con statements concorrenti
-  RESPONSE_CANDY <= map_board(QUERY_CANDY.row, QUERY_CANDY.col);
-  RESPONSE_VIEW  <= map_board(QUERY_VIEW.row, QUERY_VIEW.col);
+  -- Risposta a query su singola cella con statement concorrente
+  RESPONSE_VIEW <= map_board(QUERY_VIEW.row, QUERY_VIEW.col);
 
 
 end architecture;
