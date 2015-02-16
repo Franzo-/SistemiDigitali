@@ -77,16 +77,31 @@ package pacman_package is
   type move_commands_array is array (0 to (NUMBER_OF_CHARACTERS-1)) of move_commands;
 
   -----------------------------------------------------------------------------
-  
+
   -- Segnali di can_move raggruppati
-  type can_move is record 
+  type can_move is record
     can_move_up    : std_logic;
-	 can_move_down  : std_logic;
-	 can_move_right : std_logic;
-	 can_move_left  : std_logic;
+    can_move_down  : std_logic;
+    can_move_right : std_logic;
+    can_move_left  : std_logic;
   end record can_move;
-  
+
   ------------------------------------------------------------------------------
+
+  -- Intelligenza dei fantasmini
+  type ghost_direction is (UP_DIR, DOWN_DIR, LEFT_DIR, RIGHT_DIR, IDLE);
+
+  function is_crossroad (
+    signal current_dir : ghost_direction;
+    signal can_moves   : can_move)
+    return boolean;
+
+  function random_direction (
+    signal random_value : integer range 0 to 3;
+    signal can_moves : can_move)
+    return ghost_direction;
+
+  -----------------------------------------------------------------------------
 
   -- Coordinates at reset
   constant PACMAN_RESET_POS : cell_coordinates := (
@@ -100,3 +115,61 @@ package pacman_package is
     );
 
 end package;
+
+package body pacman_package is
+
+  -- Funzione che riconosce se i fantasmini sono in un incrocio della mappa
+  function is_crossroad (
+    current_dir : ghost_direction;
+    can_moves   : can_move)
+    return boolean is variable incrocio : boolean;
+  begin  -- function is_crossroad
+
+    case current_dir is
+      when UP_DIR | DOWN_DIR =>
+        if ((can_moves.can_move_left = '1') or (can_moves.can_move_right = '1')) then
+          incrocio := true;
+        end if;
+      when LEFT_DIR | RIGHT_DIR =>
+        if ((can_moves.can_move_up = '1') or (can_moves.can_move_down = '1')) then
+          incrocio := true;
+        end if;
+      when others => incrocio := false;
+    end case;
+
+    return incrocio;
+  end function is_crossroad;
+
+  -----------------------------------------------------------------------------
+
+  -- Genera una direzione casuale quando il fantasmino è a un incrocio
+  function random_direction (
+    random_value : integer range 0 to 3;
+    can_moves    : can_move)
+    return ghost_direction is variable direction : ghost_direction := IDLE;
+  begin  -- function random_direction
+
+    case random_value is
+      when 0 =>
+        if (can_moves.can_move_up = '1') then
+          direction := UP_DIR;
+        end if;
+      when 1 =>
+        if (can_moves.can_move_down = '1') then
+          direction := DOWN_DIR;
+        end if;
+      when 2 =>
+        if (can_moves.can_move_left = '1') then
+          direction := LEFT_DIR;
+        end if;
+      when 3 =>
+        if (can_moves.can_move_right = '1') then
+          direction := RIGHT_DIR;
+        end if;
+      when others => direction := IDLE;
+    end case;
+
+    return direction;
+  end function random_direction;
+
+end package body pacman_package;
