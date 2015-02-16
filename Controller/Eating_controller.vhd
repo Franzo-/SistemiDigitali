@@ -8,20 +8,12 @@ entity Eating_controller is
 
 	port(
 			--segnali ingresso
-			PACMAN_COORDINATES 	  : in cell_coordinates; --da aggiungere i fantasmi o fare un array unico?
-			--CHARACTERS_COORDINATES : in character_cell_array;
-			GHOST1_COORDINATES     : in cell_coordinates;
-			GHOST2_COORDINATES     : in cell_coordinates;
-			GHOST3_COORDINATES     : in cell_coordinates;
-			GHOST4_COORDINATES     : in cell_coordinates;
-			CLOCK          		  : in  std_logic;
-         RESET_N        		  : in  std_logic;
+			CHARACTERS_COORDINATES : in character_cell_array;
 			CANDY_LEFT 				  : in integer;  
-			RESPONSE_CANDY 		  : in map_cell_type;  --(presenza della caramella) riceve casella del pacman dopo query candy
+		
 			--segnali di uscita
 			GAME_OVER 				  : out std_logic;
 			WIN 						  : out std_logic;
-			QUERY_CANDY  			  : out cell_coordinates;  --(chiede al model il blocco in cui si trova pacman mandando le sue coordinate)
 			REMOVE_CANDY 			  : out cell_coordinates  --(indica al model di rimuovere una caramella)
 			
 			
@@ -32,59 +24,78 @@ end entity;
 
 architecture my_eating_controller of	Eating_controller is
 
+	signal pacman_coordinates : cell_coordinates;
+	signal ghost1_coordinates : cell_coordinates;
+	signal ghost2_coordinates : cell_coordinates;
+   signal ghost3_coordinates : cell_coordinates;
+   signal ghost4_coordinates : cell_coordinates;
+
 
 begin
 
+	pacman_coordinates <= CHARACTERS_COORDINATES(0).coordinates;
+	ghost1_coordinates <= CHARACTERS_COORDINATES(1).coordinates;
+	ghost2_coordinates <= CHARACTERS_COORDINATES(2).coordinates;
+	ghost3_coordinates <= CHARACTERS_COORDINATES(3).coordinates;
+	ghost4_coordinates <= CHARACTERS_COORDINATES(4).coordinates;
+	
+--statement concorrente per il pacman----------
+--dove passa il pacman viene sempre rimossa a prescindere la caramella (se non c'e non succede nulla)
+	REMOVE_CANDY <= pacman_coordinates;
 
---processo per il pacman----------
-	pacman_eating : process(PACMAN_COORDINATES) 
-	
-	begin
-	QUERY_CANDY <= PACMAN_COORDINATES;  --ogni volta che cambiano le coordinate, le invio al model per ricevere le info della casella
-	
-	end process pacman_eating;
-	
-	
-	
 	
 ----------------------------------------------------------------------
+
 --processo per i fantasmi----------
-	ghost_eating : process(GHOST1_COORDINATES,GHOST2_COORDINATES,GHOST3_COORDINATES,GHOST4_COORDINATES) 
+	ghost_eating : process(ghost1_coordinates,ghost2_coordinates,ghost3_coordinates,ghost4_coordinates,pacman_coordinates) 
+	
 	
 	begin
-	--
+	GAME_OVER <= '0';
 	
+
+	
+	--confronto le coordinate del pacman con le coordinate dei fantasmi
+	--genera gameover se uno dei confronti ha successo
+	if(ghost1_coordinates = pacman_coordinates or ghost2_coordinates = pacman_coordinates or 
+	   ghost3_coordinates = pacman_coordinates or ghost4_coordinates = pacman_coordinates) then
+		
+		GAME_OVER <= '1';
+	end if;
+	
+
 	end process ghost_eating;
 	
 	
 	
 	
-----------------------------------------------------------------------
-
---processo per il RESPONSE_CANDY----------
-	Response_candy_trigger : process(RESPONSE_CANDY) 
-	
-	--inizializzare in qualche modo il RESPONSE_CANDY??
-	begin
-	--quando arriva la RESPONSE_CANDY dal model cosa faccio?
-	if()
-	
-	end process Response_candy_trigger;
-	
-	
-	
-	
-----------------------------------------------------------------------
+------------------------------------------------------------------------
+--
+----processo per il RESPONSE_CANDY----------
+--	Response_candy_trigger : process(RESPONSE_CANDY) 
+--	
+--	--inizializzare in qualche modo il RESPONSE_CANDY??
+--	begin
+--	
+--	--controllo se c'e caramellina in tal caso ,mando un remove candy con le stesse coordinate
+--	if(RESPONSE_CANDY.is_candy = '1') then
+--	REMOVE_CANDY <= pacman_coordinates;
+--	
+--	end if;
+--	end process Response_candy_trigger;
+--	
+--	
+--	
+--	
+------------------------------------------------------------------------
   
   ------processo che si attiva ogni volta che cambia il numero delle caramelle-----
-  Candy_trigger : process (CANDY_LEFT,RESET_N)
+  Candy_trigger : process (CANDY_LEFT)
   begin
-	WIN <= '1';
+	WIN <= '0';
 	
-  if(RESET_N = '0') then
-		WIN <= '0';
 
-  elsif(CANDY_LEFT = 0) then
+  if(CANDY_LEFT = 0) then
 		WIN <= '1';
 		
 	end if;	
