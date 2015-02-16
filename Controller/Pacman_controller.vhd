@@ -29,16 +29,11 @@ architecture my_pacman_controller of pacman_controller is
 
 
 begin
+
   Pacman_controller : process(CLOCK, RESET_N)
 		
   begin
 		
-		MOVE_COMMANDS.move_down <= '0';
-		MOVE_COMMANDS.move_up <= '0';
-		MOVE_COMMANDS.move_left <= '0';
-		MOVE_COMMANDS.move_right <= '0';
-		
-
     if(RESET_N = '0') then
       MOVE_COMMANDS.move_down <= '0';  --monoimpulsori
 		MOVE_COMMANDS.move_up <= '0';
@@ -47,7 +42,7 @@ begin
 		
 
     elsif rising_edge(CLOCK) then
-      MOVE_COMMANDS.move_up    <= '0';                --monoimpulsori
+      MOVE_COMMANDS.move_up    <= '0'; --monoimpulsori
       MOVE_COMMANDS.move_down<= '0';
       MOVE_COMMANDS.move_left<= '0';
       MOVE_COMMANDS.move_right <= '0';
