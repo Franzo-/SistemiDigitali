@@ -114,6 +114,13 @@ package pacman_package is
     row => MAP_ROWS/2
     );
 
+	 
+   -----------------------------------------------------------------------------
+
+  -- enumerativi che indicano la stringa che  l'automa passa alla view (la stringa indica in che stato siamo)
+  type string_condition_type is (START_SCREEN,PLAYING, PAUSE,WIN,GAME_OVER);
+
+  -----------------------------------------------------------------------------	 
 end package;
 
 package body pacman_package is
@@ -171,5 +178,8 @@ package body pacman_package is
 
     return direction;
   end function random_direction;
+  
+  
+
 
 end package body pacman_package;
