@@ -9,6 +9,7 @@ entity Pacman_controller is
     (
       CLOCK   : in std_logic;
       RESET_N : in std_logic;
+		ENABLE_CONTROLLER : in std_logic;
 
       --segnali dei tasti direzionali
       BUTTON_UP    : in std_logic;
@@ -42,27 +43,30 @@ begin
 		
 
     elsif rising_edge(CLOCK) then
-      MOVE_COMMANDS.move_up    <= '0'; --monoimpulsori
-      MOVE_COMMANDS.move_down<= '0';
-      MOVE_COMMANDS.move_left<= '0';
-      MOVE_COMMANDS.move_right <= '0';
+	 
+		if(ENABLE_CONTROLLER = '1') then
+			MOVE_COMMANDS.move_up    <= '0'; --monoimpulsori
+			MOVE_COMMANDS.move_down<= '0';
+			MOVE_COMMANDS.move_left<= '0';
+			MOVE_COMMANDS.move_right <= '0';
 
-      --ad ogni fronte positivo di ck verifico dove deve andare il pacman
-      --(ad ogni passo corrisponde la pressione di un tasto)
+			--ad ogni fronte positivo di ck verifico dove deve andare il pacman
+			--(ad ogni passo corrisponde la pressione di un tasto)
 
-      if(BUTTON_UP = '1' and CAN_MOVES.can_move_up = '1') then
-        MOVE_COMMANDS.move_up <= '1';
+			if(BUTTON_UP = '1' and CAN_MOVES.can_move_up = '1') then
+			  MOVE_COMMANDS.move_up <= '1';
 
-      elsif(BUTTON_DOWN = '1' and CAN_MOVES.can_move_down = '1') then
-        MOVE_COMMANDS.move_down <= '1';
+			elsif(BUTTON_DOWN = '1' and CAN_MOVES.can_move_down = '1') then
+			  MOVE_COMMANDS.move_down <= '1';
 
-      elsif(BUTTON_RIGHT = '1' and CAN_MOVES.can_move_right = '1') then
-        MOVE_COMMANDS.move_right <= '1';
+			elsif(BUTTON_RIGHT = '1' and CAN_MOVES.can_move_right = '1') then
+			  MOVE_COMMANDS.move_right <= '1';
 
-      elsif(BUTTON_LEFT = '1' and CAN_MOVES.can_move_left = '1') then
-        MOVE_COMMANDS.move_left <= '1';
-      end if;
-    end if;
+			elsif(BUTTON_LEFT = '1' and CAN_MOVES.can_move_left = '1') then
+			  MOVE_COMMANDS.move_left <= '1';
+			end if;
+		end if;
+	end if;
   end process;
 
 end architecture;
