@@ -19,8 +19,7 @@ entity FSM_Controller is
       BUTTON_LEFT    : in std_logic;
 	----output-------------------
 
-		ENABLE_PACMAN_CONTROLLER 					: out std_logic;
-		ENABLE_IAGHOST   : out	std_logic;
+		ENABLE_CONTROLLER 					: out std_logic;
 		CURRENT_STATE 						: out state_controller_type
 	);
 end entity;
@@ -39,8 +38,7 @@ begin
 		if (RESET_N = '0') then
 		--al reset riparto dalla schermata iniziale e disattivo i controller
 			state <= START_SCREEN;
-			ENABLE_PACMAN_CONTROLLER	<= '0';
-			ENABLE_IAGHOST	<= '0';
+			ENABLE_CONTROLLER	<= '0';
 			CURRENT_STATE <= state; --START_SCREEN
 
 
@@ -55,8 +53,7 @@ begin
 					if (BUTTON_DOWN = '1' or BUTTON_UP = '1' 
 							or BUTTON_LEFT = '1' or BUTTON_RIGHT ='1') then
 						state    <= PLAYING;
-						ENABLE_PACMAN_CONTROLLER <= '1';
-						ENABLE_IAGHOST  <='1';
+						ENABLE_CONTROLLER <= '1';
 						CURRENT_STATE <= state; --PLAYING
 					end if;
 					
@@ -65,20 +62,17 @@ begin
 				-- collide con un fantasma, o se abbiamo finito le caramelle
 				   if(PAUSE_SIGNAL = '1') then
 						state <= PAUSE;
-						ENABLE_PACMAN_CONTROLLER <= '0';
-						ENABLE_IAGHOST  <='0';
+						ENABLE_CONTROLLER <= '0';
 						CURRENT_STATE <= state; --PAUSE
 					
 					elsif  (WIN_SIGNAL = '1') then
 						state <= WIN;
-						ENABLE_PACMAN_CONTROLLER <= '0';
-						ENABLE_IAGHOST  <='0';
+						ENABLE_CONTROLLER <= '0';
 						CURRENT_STATE <= state; --WIN
 						
 					elsif  (GAME_OVER_SIGNAL = '1') then
 						state <= GAME_OVER;
-						ENABLE_PACMAN_CONTROLLER <= '0';
-						ENABLE_IAGHOST  <='0';
+						ENABLE_CONTROLLER <= '0';
 						CURRENT_STATE <= state; --GAME_OVER	
 						
 					end if;
@@ -88,16 +82,14 @@ begin
 					-- sulla FPGA (PAUSE_SIGNAL ='0')
 					if(PAUSE_SIGNAL = '0') then
 						state <= PLAYING;
-						ENABLE_PACMAN_CONTROLLER <= '1';
-						ENABLE_IAGHOST  <='1';
+						ENABLE_CONTROLLER <= '1';
 						CURRENT_STATE <= state; --PLAYING	
 					end if;
 				
 			when WIN | GAME_OVER=>
 					--win e game over saranno molto simili: si resetta allo stato iniziale con la pressione del reset
 					--e inviano semplicemente l'enumerativo alla view. stoppiamo tutti i movimenti
-					ENABLE_PACMAN_CONTROLLER <= '0';
-					ENABLE_IAGHOST  <='0';
+					ENABLE_CONTROLLER <= '0';
 					
 					if(state = WIN) then
 					CURRENT_STATE <= state; 

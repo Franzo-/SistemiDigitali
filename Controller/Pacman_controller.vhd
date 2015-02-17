@@ -9,7 +9,7 @@ entity Pacman_controller is
     (
       CLOCK   : in std_logic;
       RESET_N : in std_logic;
-		ENABLE_CONTROLLER : in std_logic;
+		ENABLE : in std_logic;
 
       --segnali dei tasti direzionali
       BUTTON_UP    : in std_logic;
@@ -50,7 +50,7 @@ begin
 			MOVE_COMMANDS.move_left<= '0';
 			MOVE_COMMANDS.move_right <= '0';
 			
-		if(ENABLE_CONTROLLER = '1') then
+		if(ENABLE = '1') then
 			--ad ogni fronte positivo di ck verifico dove deve andare il pacman
 			--(ad ogni passo corrisponde la pressione di un tasto)
 

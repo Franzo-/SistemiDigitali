@@ -85,6 +85,8 @@ package pacman_package is
     can_move_right : std_logic;
     can_move_left  : std_logic;
   end record can_move;
+  
+  type can_move_array is array (0 to (NUMBER_OF_CHARACTERS-1)) of can_move;
 
   ------------------------------------------------------------------------------
 
