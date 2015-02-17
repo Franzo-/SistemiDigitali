@@ -20,17 +20,16 @@ entity FSM_Controller is
 	----output-------------------
 
 		ENABLE_PACMAN_CONTROLLER 					: out std_logic;
-		ENABLE_COLLISION_DETECTION_CONTROLLER   : out	std_logic;
-		STRING_CONDITION_TYPE 						: out string_condition_type
-		
+		ENABLE_IAGHOST   : out	std_logic;
+		CURRENT_STATE 						: out state_controller_type
 	);
 end entity;
 
 
 architecture my_FSM_Controller of FSM_Controller is
 	
-	type   state_type    is (START_SCREEN, PLAYING, PAUSE, WIN, GAME_OVER);
-	signal state        : state_type;
+	
+	signal state        : state_controller_type;
 
 begin
 
@@ -41,8 +40,8 @@ begin
 		--al reset riparto dalla schermata iniziale e disattivo i controller
 			state <= START_SCREEN;
 			ENABLE_PACMAN_CONTROLLER	<= '0';
-			ENABLE_COLLISION_DETECTION_CONTROLLER	<= '0';
-			STRING_CONDITION_TYPE <= string_condition_type'val(0); --START_SCREEN
+			ENABLE_IAGHOST	<= '0';
+			CURRENT_STATE <= state; --START_SCREEN
 
 
 		elsif (rising_edge(CLOCK)) then
@@ -57,8 +56,8 @@ begin
 							or BUTTON_LEFT = '1' or BUTTON_RIGHT ='1') then
 						state    <= PLAYING;
 						ENABLE_PACMAN_CONTROLLER <= '1';
-						ENABLE_COLLISION_DETECTION_CONTROLLER  <='1';
-						STRING_CONDITION_TYPE <= string_condition_type'val(1); --PLAYING
+						ENABLE_IAGHOST  <='1';
+						CURRENT_STATE <= state; --PLAYING
 					end if;
 					
 				when PLAYING =>
@@ -67,20 +66,20 @@ begin
 				   if(PAUSE_SIGNAL = '1') then
 						state <= PAUSE;
 						ENABLE_PACMAN_CONTROLLER <= '0';
-						ENABLE_COLLISION_DETECTION_CONTROLLER  <='0';
-						STRING_CONDITION_TYPE <= string_condition_type'val(2); --PAUSE
+						ENABLE_IAGHOST  <='0';
+						CURRENT_STATE <= state; --PAUSE
 					
 					elsif  (WIN_SIGNAL = '1') then
 						state <= WIN;
 						ENABLE_PACMAN_CONTROLLER <= '0';
-						ENABLE_COLLISION_DETECTION_CONTROLLER  <='0';
-						STRING_CONDITION_TYPE <= string_condition_type'val(3); --WIN
+						ENABLE_IAGHOST  <='0';
+						CURRENT_STATE <= state; --WIN
 						
 					elsif  (GAME_OVER_SIGNAL = '1') then
 						state <= GAME_OVER;
 						ENABLE_PACMAN_CONTROLLER <= '0';
-						ENABLE_COLLISION_DETECTION_CONTROLLER  <='0';
-						STRING_CONDITION_TYPE <= string_condition_type'val(4); --GAME_OVER	
+						ENABLE_IAGHOST  <='0';
+						CURRENT_STATE <= state; --GAME_OVER	
 						
 					end if;
 				
@@ -90,27 +89,21 @@ begin
 					if(PAUSE_SIGNAL = '0') then
 						state <= PLAYING;
 						ENABLE_PACMAN_CONTROLLER <= '1';
-						ENABLE_COLLISION_DETECTION_CONTROLLER  <='1';
-						STRING_CONDITION_TYPE <= string_condition_type'val(1); --PLAYING	
+						ENABLE_IAGHOST  <='1';
+						CURRENT_STATE <= state; --PLAYING	
 					end if;
 				
 			when WIN | GAME_OVER=>
 					--win e game over saranno molto simili: si resetta allo stato iniziale con la pressione del reset
 					--e inviano semplicemente l'enumerativo alla view. stoppiamo tutti i movimenti
 					ENABLE_PACMAN_CONTROLLER <= '0';
-					ENABLE_COLLISION_DETECTION_CONTROLLER  <='0';
+					ENABLE_IAGHOST  <='0';
 					
 					if(state = WIN) then
-					STRING_CONDITION_TYPE <= string_condition_type'val(3); --è davvero necessaria sta riga??
+					CURRENT_STATE <= state; 
 					elsif (state = GAME_OVER) then
-					STRING_CONDITION_TYPE <= string_condition_type'val(4); --è davvero necessaria sta riga??
+					CURRENT_STATE <= state; 
 					end if;
-					
-					if(RESET_N = '0') then --ricominciamo il gioco
-						state <= START_SCREEN;
-						STRING_CONDITION_TYPE <= string_condition_type'val(0); --START_SCREEN
-					end if;	
-					
 
 			end case;
 	

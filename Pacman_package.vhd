@@ -118,7 +118,7 @@ package pacman_package is
    -----------------------------------------------------------------------------
 
   -- enumerativi che indicano la stringa che  l'automa passa alla view (la stringa indica in che stato siamo)
-  type string_condition_type is (START_SCREEN,PLAYING, PAUSE,WIN,GAME_OVER);
+  type state_controller_type is (START_SCREEN,PLAYING, PAUSE,WIN,GAME_OVER);
 
   -----------------------------------------------------------------------------	 
 end package;

@@ -44,12 +44,13 @@ begin
 
     elsif rising_edge(CLOCK) then
 	 
-		if(ENABLE_CONTROLLER = '1') then
+		
 			MOVE_COMMANDS.move_up    <= '0'; --monoimpulsori
 			MOVE_COMMANDS.move_down<= '0';
 			MOVE_COMMANDS.move_left<= '0';
 			MOVE_COMMANDS.move_right <= '0';
-
+			
+		if(ENABLE_CONTROLLER = '1') then
 			--ad ogni fronte positivo di ck verifico dove deve andare il pacman
 			--(ad ogni passo corrisponde la pressione di un tasto)
 
