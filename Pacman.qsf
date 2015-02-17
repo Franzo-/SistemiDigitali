@@ -344,3 +344,5 @@ set_global_assignment -name VHDL_FILE Model/Map.vhd
 set_global_assignment -name VHDL_FILE Model/Moving_parts.vhd
 set_global_assignment -name VHDL_FILE Pacman.vhd
 set_global_assignment -name VHDL_FILE Controller/IA_Ghosts.vhd
+set_global_assignment -name VHDL_FILE Controller/Controller_top_level.vhd
+set_global_assignment -name VHDL_FILE Controller/FSM_controller.vhd
