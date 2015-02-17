@@ -85,7 +85,7 @@ package pacman_package is
     can_move_right : std_logic;
     can_move_left  : std_logic;
   end record can_move;
-  
+
   type can_move_array is array (0 to (NUMBER_OF_CHARACTERS-1)) of can_move;
 
   ------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ package pacman_package is
 
   function random_direction (
     signal random_value : integer range 0 to 3;
-    signal can_moves : can_move)
+    signal can_moves    : can_move)
     return ghost_direction;
 
   -----------------------------------------------------------------------------
@@ -116,13 +116,13 @@ package pacman_package is
     row => MAP_ROWS/2
     );
 
-	 
-   -----------------------------------------------------------------------------
+
+  -----------------------------------------------------------------------------
 
   -- enumerativi che indicano la stringa che  l'automa passa alla view (la stringa indica in che stato siamo)
-  type state_controller_type is (START_SCREEN,PLAYING, PAUSE,WIN,GAME_OVER);
+  type state_controller_type is (START_SCREEN, PLAYING, PAUSE, WIN, GAME_OVER);
 
-  -----------------------------------------------------------------------------	 
+-----------------------------------------------------------------------------    
 end package;
 
 package body pacman_package is
@@ -180,8 +180,8 @@ package body pacman_package is
 
     return direction;
   end function random_direction;
-  
-  
+
+
 
 
 end package body pacman_package;
