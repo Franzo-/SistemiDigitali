@@ -36,16 +36,16 @@ end;
 
 architecture RTL of Pacman is
 
-signal number : integer range 0 to 9999 := 0;
-signal digit1, digit2, digit3, digit4 : integer range 0 to 9 := 0;
+--signal number : integer range 0 to 9999 := 0;
+--signal digit1, digit2, digit3, digit4 : integer range 0 to 9 := 0;
  
 begin 
 
-number <= 1992;
-seg_ctrl(number, digit1, digit2, digit3, digit4);
-HEX0<= int_to7seg(digit1);
-HEX1<= int_to7seg(digit2);
-HEX2<= int_to7seg(digit3);
-HEX3<= int_to7seg(digit4);
+--number <= 1992;
+--seg_ctrl(number, digit1, digit2, digit3, digit4);
+--HEX0<= int_to7seg(digit1);
+--HEX1<= int_to7seg(digit2);
+--HEX2<= int_to7seg(digit3);
+--HEX3<= int_to7seg(digit4);
 
 end architecture;
