@@ -73,23 +73,19 @@ begin
 
     -- L'aggiornamento della mappa è sincrono con il clock di sistema  
     elsif (rising_edge(CLOCK)) then
-      if (candy_removal = '1') then
-        selected_cell                                 := map_board(REMOVE_CANDY.row, REMOVE_CANDY.col);
-        selected_cell.is_candy                        := '0';
-        map_board(REMOVE_CANDY.row, REMOVE_CANDY.col) <= selected_cell;
-        candy_removal                                 <= '0';
-      end if;
+		  candy_removal <= '0';
+        selected_cell := map_board(REMOVE_CANDY.row, REMOVE_CANDY.col);
+		  
+		  if(selected_cell.is_candy = '1') then 
+		      candy_removal <= '1';
+				selected_cell.is_candy := '0';
+				map_board(REMOVE_CANDY.row, REMOVE_CANDY.col) <= selected_cell;
+		  end if;
+
     end if;
 
   end process MapUpdate;
 
-  -----------------------------------------------------------------------------
-
-  -- Segnala internamente al process sincrono di rimuovere la caramellina
-  RemoveCandy : process(REMOVE_CANDY)
-  begin
-    candy_removal <= '1';
-  end process RemoveCandy;
 
   -----------------------------------------------------------------------------
 
