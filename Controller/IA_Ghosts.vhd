@@ -81,6 +81,11 @@ begin
             else
               MOVE_COMMANDS.move_left <= '1';
             end if;
+			 when OTHERS => 
+			   MOVE_COMMANDS.move_up <= '0';
+				MOVE_COMMANDS.move_right <= '0';
+				MOVE_COMMANDS.move_down <= '0';
+				MOVE_COMMANDS.move_left <= '0';
         end case;
 
       end if;  --ENABLE
