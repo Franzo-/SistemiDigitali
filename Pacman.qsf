@@ -334,6 +334,9 @@ set_location_assignment PIN_E12 -to CLOCK_27[1]
 set_location_assignment PIN_B12 -to CLOCK_24[0]
 set_location_assignment PIN_A12 -to CLOCK_24[1]
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name VHDL_FILE View/View_top_level.vhd
 set_global_assignment -name VHDL_FILE View/View_package.vhd
 set_global_assignment -name VHDL_FILE Model/Model_top_level.vhd
 set_global_assignment -name VHDL_FILE Controller/Eating_controller.vhd
@@ -347,8 +350,6 @@ set_global_assignment -name VHDL_FILE Pacman.vhd
 set_global_assignment -name VHDL_FILE Controller/IA_Ghosts.vhd
 set_global_assignment -name VHDL_FILE Controller/Controller_top_level.vhd
 set_global_assignment -name VHDL_FILE Controller/FSM_controller.vhd
-set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
-set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name VHDL_FILE View/SevenSeg_component.vhd
 set_global_assignment -name QIP_FILE PLL.qip
 set_global_assignment -name VHDL_FILE View/VGA_Controller.vhd
