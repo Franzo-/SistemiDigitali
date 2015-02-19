@@ -12,18 +12,18 @@ entity ModelTopLevel is
     RESET_N : in std_logic;
 
     -- Map
-    QUERY_NEARBY    : in  cell_nearby_array;
+    QUERY_NEARBY_ARRAY    : in  cell_nearby_array;
     QUERY_VIEW      : in  cell_coordinates;
     REMOVE_CANDY    : in  cell_coordinates;
     --
-    RESPONSE_NEARBY : out cell_nearby_content_array;
+    RESPONSE_NEARBY_ARRAY : out cell_nearby_content_array;
     RESPONSE_VIEW   : out map_cell_type;
     CANDY_LEFT      : out integer range 0 to (MAX_CANDIES-1);
 
     -- MovingParts
-    MOVE_COMMANDS          : in  move_commands_array;
+    MOVE_COMMANDS_ARRAY          : in  move_commands_array;
     --
-    CHARACTERS_COORDINATES : out character_cell_array
+    CHARACTERS_COORDINATES_ARRAY : out character_cell_array
     );
 
 end entity ModelTopLevel;
@@ -36,10 +36,10 @@ begin  -- architecture Structural
     port map (
       CLOCK           => CLOCK,
       RESET_N         => RESET_N,
-      QUERY_NEARBY    => QUERY_NEARBY,
+      QUERY_NEARBY    => QUERY_NEARBY_ARRAY,
       QUERY_VIEW      => QUERY_VIEW,
       REMOVE_CANDY    => REMOVE_CANDY,
-      RESPONSE_NEARBY => RESPONSE_NEARBY,
+      RESPONSE_NEARBY => RESPONSE_NEARBY_ARRAY,
       RESPONSE_VIEW   => RESPONSE_VIEW,
       CANDY_LEFT      => CANDY_LEFT
       );
@@ -48,8 +48,8 @@ begin  -- architecture Structural
     port map (
       CLOCK                  => CLOCK,
       RESET_N                => RESET_N,
-      MOVE_COMMANDS          => MOVE_COMMANDS,
-      CHARACTERS_COORDINATES => CHARACTERS_COORDINATES
+      MOVE_COMMANDS          => MOVE_COMMANDS_ARRAY,
+      CHARACTERS_COORDINATES => CHARACTERS_COORDINATES_ARRAY
       );
 
 
