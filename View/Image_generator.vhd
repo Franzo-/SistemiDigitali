@@ -7,18 +7,20 @@ use work.view_package.all;
 entity ImageGenerator is
 
   port (
-    DISP_ENABLE : in std_logic;
-    ROW         : in integer;
-    COLUMN      : in integer;
-
-    RESPONSE_VIEW                : in  map_cell_type;
-    CHARACTERS_COORDINATES_ARRAY : in  character_cell_array;
+    -- Inputs
+    DISP_ENABLE                  : in std_logic;
+    ROW                          : in integer;
+    COLUMN                       : in integer;
     --
-    RED                          : out std_logic_vector(3 downto 0);
-    GREEN                        : out std_logic_vector(3 downto 0);
-    BLUE                         : out std_logic_vector(3 downto 0);
+    CELL_CONTENT                 : in map_cell_type;
+    CHARACTERS_COORDINATES_ARRAY : in character_cell_array;
 
-    QUERY_VIEW : out cell_coordinates
+    -- Outputs
+    RED        : out std_logic_vector(3 downto 0);
+    GREEN      : out std_logic_vector(3 downto 0);
+    BLUE       : out std_logic_vector(3 downto 0);
+    --
+    QUERY_CELL : out cell_coordinates
 
     );
 
@@ -33,7 +35,7 @@ architecture RTL of ImageGenerator is
 begin  -- architecture RTL
 
   -- Colora l'immagine pixel per pixel
-  ImagePixeling : process (DISP_ENABLE, ROW, COLUMN, RESPONSE_VIEW)
+  ImagePixeling : process (DISP_ENABLE, ROW, COLUMN, CELL_CONTENT, CHARACTERS_COORDINATES_ARRAY)
 
   begin  -- process ImagePixeling
 
@@ -47,12 +49,12 @@ begin  -- architecture RTL
 
       else
 
-        QUERY_VIEW.row <= cell_row;
-        QUERY_VIEW.col <= cell_col;
+        QUERY_CELL.row <= cell_row;
+        QUERY_CELL.col <= cell_col;
 
-        ResponseView : if (RESPONSE_VIEW.is_wall = '1') then
+        ResponseView : if (CELL_CONTENT.is_wall = '1') then
           color_vector <= COLOR_BLUE;
-        elsif (RESPONSE_VIEW.is_candy = '1') then
+        elsif (CELL_CONTENT.is_candy = '1') then
           color_vector <= COLOR_YELLOW;
         else
           color_vector <= COLOR_BLACK;

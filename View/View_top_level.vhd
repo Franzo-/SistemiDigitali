@@ -9,26 +9,40 @@ use work.view_package.all;
 entity ViewTopLevel is
 
   port (
-    CLOCK   : in  std_logic;
-    RESET_N : in  std_logic;
+    -- Inputs
+    CLOCK                        : in std_logic;
+    RESET_N                      : in std_logic;
     --
-    H_SYNC  : out std_logic;
-    V_SYNC  : out std_logic;
-    VGA_R   : out std_logic_vector(3 downto 0);
-    VGA_G   : out std_logic_vector(3 downto 0);
-    VGA_B   : out std_logic_vector(3 downto 0)
+    CANDY_LEFT                   : in integer range 0 to (MAX_CANDIES-1);
+    --
+    RESPONSE_VIEW                : in map_cell_type;
+    CHARACTERS_COORDINATES_ARRAY : in character_cell_array;
+
+    -- Outputs
+    QUERY_VIEW : out cell_coordinates;
+    --
+    HEX0       : out std_logic_vector(6 downto 0);
+    HEX1       : out std_logic_vector(6 downto 0);
+    HEX2       : out std_logic_vector(6 downto 0);
+    HEX3       : out std_logic_vector(6 downto 0);
+    --
+    H_SYNC     : out std_logic;
+    V_SYNC     : out std_logic;
+    VGA_R      : out std_logic_vector(3 downto 0);
+    VGA_G      : out std_logic_vector(3 downto 0);
+    VGA_B      : out std_logic_vector(3 downto 0)
     );
 
 end entity ViewTopLevel;
 
 architecture Structural of ViewTopLevel is
 
-  signal disp_ena : std_logic;
-  signal column   : integer;
-  signal row      : integer;
+  signal disp_enable : std_logic;
+  signal column      : integer;
+  signal row         : integer;
 
-  signal n_blank : std_logic;
-  signal n_sync  : std_logic;
+  signal n_blank : std_logic;           -- unused
+  signal n_sync  : std_logic;           -- unused
 
 begin  -- architecture Structural
 
@@ -53,12 +67,38 @@ begin  -- architecture Structural
       reset_n   => RESET_N,
       h_sync    => H_SYNC,
       v_sync    => V_SYNC,
-      disp_ena  => disp_ena,
+      disp_ena  => disp_enable,
       column    => column,
       row       => row,
-      n_blank   => n_blank,             -- boh
-      n_sync    => n_sync               -- boh
+      n_blank   => n_blank,             -- unused
+      n_sync    => n_sync               -- unused
 
+      );
+
+  -----------------------------------------------------------------------------
+
+  ImageGenerator : entity work.ImageGenerator
+    port map (
+      DISP_ENABLE                  => disp_enable,
+      ROW                          => row,
+      COLUMN                       => column,
+      CELL_CONTENT                 => RESPONSE_VIEW,
+      CHARACTERS_COORDINATES_ARRAY => CHARACTERS_COORDINATES_ARRAY,
+      RED                          => VGA_R,
+      GREEN                        => VGA_G,
+      BLUE                         => VGA_B,
+      QUERY_CELL                   => QUERY_VIEW
+      );
+
+  -----------------------------------------------------------------------------
+
+  SevenSegments : entity work.SevenSegEntity
+    port map (
+      CANDY_LEFT => CANDY_LEFT,
+      HEX0       => HEX0,
+      HEX1       => HEX1,
+      HEX2       => HEX2,
+      HEX3       => HEX3
       );
 
 ------------------------------------------------------------------------
@@ -77,6 +117,9 @@ begin  -- architecture Structural
 --      green    => VGA_G,
 --      blue     => VGA_B
 --      );
+
+
+
 
 
 end architecture Structural;

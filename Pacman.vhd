@@ -116,13 +116,24 @@ begin
 
   View : entity work.ViewTopLevel
     port map (
-      CLOCK   => clock_vga,
-      RESET_N => reset_n,
-      H_SYNC  => VGA_HS,
-      V_SYNC  => VGA_VS,
-      VGA_R   => VGA_R,
-      VGA_G   => VGA_G,
-      VGA_B   => VGA_B
+
+      CLOCK                        => clock_vga,
+      RESET_N                      => reset_n,
+      CANDY_LEFT                   => candy_left,
+      RESPONSE_VIEW                => response_view,
+      CHARACTERS_COORDINATES_ARRAY => character_coordinates_array,
+      --
+      QUERY_VIEW                   => query_view,
+      HEX0                         => HEX0,
+      HEX1                         => HEX1,
+      HEX2                         => HEX2,
+      HEX3                         => HEX3,
+      H_SYNC                       => VGA_HS,
+      V_SYNC                       => VGA_VS,
+      VGA_R                        => VGA_R,
+      VGA_G                        => VGA_G,
+      VGA_B                        => VGA_B
+
       );
 
 
@@ -131,8 +142,10 @@ begin
 
   PLL : entity work.pll
     port map (
+
       inclk0 => CLOCK_50,
       c0     => clock_vga
+
       );
 
 
