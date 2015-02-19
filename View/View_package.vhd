@@ -32,9 +32,17 @@ package view_package is
   -----------------------------------------------------------------------------
 
   -- funzioni per la gestione dei 7 segmenti della FPGA
-  function int_to7seg (a            :    integer) return std_logic_vector;
-  
+  function int_to7seg (a : integer) return std_logic_vector;
+
   procedure seg_ctrl (signal number : in integer; signal digit1, digit2, digit3, digit4 : out integer range 0 to 9);
+
+  -----------------------------------------------------------------------------
+
+  function draw_character_pixel (
+    character_cell : character_cell_type;
+    pixel_row      : integer;
+    pixel_col      : integer)
+    return color_type;
 
 end package;
 
@@ -105,7 +113,25 @@ package body view_package is
 
   end seg_ctrl;
 
-
 -----------------------------------------------------------------------------------------
+
+  -- Restituisce il pixel della sprite del personaggio richiesto
+  function draw_character_pixel (
+    character_cell : character_cell_type;
+    pixel_row      : integer;
+    pixel_col      : integer)
+    return color_type is variable color_vector : color_type;
+  begin
+
+    case character_cell.cell_character is
+      when PACMAN_CHAR => color_vector := COLOR_YELLOW;
+      when GHOST1_CHAR => color_vector := COLOR_RED;
+      when GHOST2_CHAR => color_vector := COLOR_CYAN;
+      when GHOST3_CHAR => color_vector := COLOR_GREEN;
+      when GHOST4_CHAR => color_vector := COLOR_ORANGE;
+      when others      => color_vector := COLOR_BLACK;
+    end case;
+
+  end function draw_character_pixel;
 
 end package body view_package;

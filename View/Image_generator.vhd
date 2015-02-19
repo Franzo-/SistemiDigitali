@@ -26,6 +26,8 @@ entity ImageGenerator is
 
 end entity ImageGenerator;
 
+-------------------------------------------------------------------------------
+
 architecture RTL of ImageGenerator is
 
   signal color_vector : color_type;
@@ -37,30 +39,47 @@ begin  -- architecture RTL
   -- Colora l'immagine pixel per pixel
   ImagePixeling : process (DISP_ENABLE, ROW, COLUMN, CELL_CONTENT, CHARACTERS_COORDINATES_ARRAY)
 
+    variable tmp_character      : character_cell_type;
+    variable is_character_pixel : boolean;
+
   begin  -- process ImagePixeling
 
     DisplayEnable : if (DISP_ENABLE = '1') then  --display time
+
+      is_map_pixel := true;
 
       -- pixel coordinates -----> cell coordinates
       cell_row <= ROW / CELL_SIZE;
       cell_col <= COLUMN / CELL_SIZE;
 
-      MovingParts : if (false) then  -- TODO: Funzione di confronto con parti mobili
+      -- Prima si controlla se il pixel fa parte della cella occupata da un personaggio
+      CharacterPixel : for i in CHARACTERS_COORDINATES_ARRAY'range loop
 
-      else
+        tmp_character := CHARACTERS_COORDINATES_ARRAY(i);
+
+        if ((tmp_character.coordinates.row = cell_row) and
+            (tmp_character.coordinates.col = cell_col)) then
+          color_vector <= draw_character_pixel(tmp_character, ROW, COLUMN);
+          is_map_pixel := false;
+        end if;
+
+      end loop CharacterPixel;
+
+      -- Se la cella non ha un personaggio, si disegna il contenuto della mappa
+      MapPixel : if (is_map_pixel) then
 
         QUERY_CELL.row <= cell_row;
         QUERY_CELL.col <= cell_col;
 
-        ResponseView : if (CELL_CONTENT.is_wall = '1') then
+        if (CELL_CONTENT.is_wall = '1') then
           color_vector <= COLOR_BLUE;
         elsif (CELL_CONTENT.is_candy = '1') then
-          color_vector <= COLOR_YELLOW;
+          color_vector <= COLOR_WHITE;
         else
           color_vector <= COLOR_BLACK;
-        end if ResponseView;
+        end if;
 
-      end if MovingParts;
+      end if MapPixel;
 
     else                                --blanking time
 
@@ -68,12 +87,11 @@ begin  -- architecture RTL
 
     end if DisplayEnable;
 
+    -- Color assignments
     RED   <= color_vector(11 downto 8);
     GREEN <= color_vector(7 downto 4);
     BLUE  <= color_vector(3 downto 0);
 
   end process ImagePixeling;
-
-
 
 end architecture RTL;
