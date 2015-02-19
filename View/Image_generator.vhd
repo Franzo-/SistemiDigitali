@@ -39,8 +39,8 @@ begin  -- architecture RTL
   -- Colora l'immagine pixel per pixel
   ImagePixeling : process (DISP_ENABLE, ROW, COLUMN, CELL_CONTENT, CHARACTERS_COORDINATES_ARRAY)
 
-    variable tmp_character      : character_cell_type;
-    variable is_character_pixel : boolean;
+    variable tmp_character : character_cell_type;
+    variable is_map_pixel  : boolean;
 
   begin  -- process ImagePixeling
 

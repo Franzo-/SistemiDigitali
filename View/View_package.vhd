@@ -1,6 +1,7 @@
 library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
+use work.pacman_package.all;
 
 package view_package is
 
@@ -132,6 +133,7 @@ package body view_package is
       when others      => color_vector := COLOR_BLACK;
     end case;
 
+    return color_vector;
   end function draw_character_pixel;
 
 end package body view_package;
