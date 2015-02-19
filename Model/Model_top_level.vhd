@@ -13,12 +13,12 @@ entity ModelTopLevel is
 
     -- Map
     QUERY_NEARBY_ARRAY    : in  cell_nearby_array;
-    QUERY_VIEW      : in  cell_coordinates;
-    REMOVE_CANDY    : in  cell_coordinates;
+    QUERY_VIEW            : in  cell_coordinates;
+    REMOVE_CANDY          : in  cell_coordinates;
     --
     RESPONSE_NEARBY_ARRAY : out cell_nearby_content_array;
-    RESPONSE_VIEW   : out map_cell_type;
-    CANDY_LEFT      : out integer range 0 to (MAX_CANDIES-1);
+    RESPONSE_VIEW         : out map_cell_type;
+    CANDY_LEFT            : out integer range 0 to (MAX_CANDIES-1);
 
     -- MovingParts
     MOVE_COMMANDS_ARRAY          : in  move_commands_array;

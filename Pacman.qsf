@@ -336,6 +336,7 @@ set_location_assignment PIN_A12 -to CLOCK_24[1]
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name VHDL_FILE View/Image_generator.vhd
 set_global_assignment -name VHDL_FILE View/View_top_level.vhd
 set_global_assignment -name VHDL_FILE View/View_package.vhd
 set_global_assignment -name VHDL_FILE Model/Model_top_level.vhd

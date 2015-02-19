@@ -14,9 +14,9 @@ entity ViewTopLevel is
     --
     H_SYNC  : out std_logic;
     V_SYNC  : out std_logic;
-    VGA_R   : out std_logic_vector(7 downto 0);
-    VGA_G   : out std_logic_vector(7 downto 0);
-    VGA_B   : out std_logic_vector(7 downto 0)
+    VGA_R   : out std_logic_vector(3 downto 0);
+    VGA_G   : out std_logic_vector(3 downto 0);
+    VGA_B   : out std_logic_vector(3 downto 0)
     );
 
 end entity ViewTopLevel;
@@ -34,19 +34,19 @@ begin  -- architecture Structural
 
   VGA_Controller : entity work.vga_controller
     generic map (
-		h_pixels => 640,
-		v_pixels => 480,
-		h_fp => 16,
-	   v_fp => 10,
-	   h_pulse => 96,
-		v_pulse => 2,
-		h_bp => 48,
-		v_bp => 33,
-		h_pol => '0',
-		v_pol => '0'
-	 	
-	 )
-	 
+      h_pixels => H_PIXELS,
+      v_pixels => V_PIXELS,
+      h_fp     => 16,
+      v_fp     => 10,
+      h_pulse  => 96,
+      v_pulse  => 2,
+      h_bp     => 48,
+      v_bp     => 33,
+      h_pol    => '0',
+      v_pol    => '0'
+
+      )
+
     port map (
 
       pixel_clk => CLOCK,
@@ -63,20 +63,20 @@ begin  -- architecture Structural
 
 ------------------------------------------------------------------------
 
-  HW_IMAGE_GENERATOR : entity work.hw_image_generator
-    generic map (
-	   pixels_x => 50,
-		pixels_y => 50
-	 )
-	 
-    port map (
-      disp_ena => disp_ena,
-      column   => column,
-      row      => row,
-      red      => VGA_R,
-      green    => VGA_G,
-      blue     => VGA_B
-      );
+--  HW_IMAGE_GENERATOR : entity work.hw_image_generator
+--    generic map (
+--      pixels_x => 50,
+--      pixels_y => 50
+--      )
+--
+--    port map (
+--      disp_ena => disp_ena,
+--      column   => column,
+--      row      => row,
+--      red      => VGA_R,
+--      green    => VGA_G,
+--      blue     => VGA_B
+--      );
 
 
 end architecture Structural;
