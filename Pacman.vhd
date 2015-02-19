@@ -153,7 +153,7 @@ begin
 ------------------------------------------------------------------------
 
   timegen : process(CLOCK_50, reset_n)
-    variable counter : integer range 0 to (25000000-1);
+    variable counter : integer range 0 to (12500000-1);
   begin
     if (reset_n = '0') then
       counter    := 0;
@@ -161,10 +161,9 @@ begin
     elsif (rising_edge(CLOCK_50)) then
       if(counter = counter'high) then
         counter    := 0;
-        clock_move <= '1';
+        clock_move <= not clock_move;
       else
         counter    := counter+1;
-        clock_move <= '0';
       end if;
     end if;
   end process;

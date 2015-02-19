@@ -65,10 +65,10 @@ begin
     QUERY.cell_down.col <= CHARACTER_COORDINATES.col;
     QUERY.cell_down.row <= CHARACTER_COORDINATES.row + 1;
 
-    QUERY.cell_left.col <= CHARACTER_COORDINATES.col + 1;
+    QUERY.cell_left.col <= CHARACTER_COORDINATES.col - 1;
     QUERY.cell_left.row <= CHARACTER_COORDINATES.row;
 
-    QUERY.cell_right.col <= CHARACTER_COORDINATES.col - 1;
+    QUERY.cell_right.col <= CHARACTER_COORDINATES.col + 1;
     QUERY.cell_right.row <= CHARACTER_COORDINATES.row;
 
   end process CoordinatesChanged;

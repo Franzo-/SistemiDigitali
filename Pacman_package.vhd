@@ -8,7 +8,7 @@ package pacman_package is
   constant CELL_SIZE            : positive := 10;  -- pixels
   constant MAP_COLUMNS          : positive := 20;  -- cells
   constant MAP_ROWS             : positive := 20;  -- cells
-  constant MAX_CANDIES          : positive := 50;
+  constant MAX_CANDIES          : positive := 500;
   constant NUMBER_OF_CHARACTERS : positive := 5;   -- pacman + ghosts
 
   -----------------------------------------------------------------------------
@@ -109,13 +109,13 @@ package pacman_package is
 
   -- Coordinates at reset
   constant PACMAN_RESET_POS : cell_coordinates := (
-    col => 0,
-    row => 0
+    col => 1,
+    row => 1
     );
 
   constant GHOSTS_RESET_POS : cell_coordinates := (
-    col => MAP_COLUMNS/2,
-    row => MAP_ROWS/2
+    col =>  1,
+    row =>  MAP_ROWS - 2 
     );
 
 
@@ -133,7 +133,7 @@ package body pacman_package is
   function is_crossroad (
     current_dir : ghost_direction;
     can_moves   : can_move)
-    return boolean is variable incrocio : boolean;
+    return boolean is variable incrocio : boolean := false;
   begin  -- function is_crossroad
 
     case current_dir is
