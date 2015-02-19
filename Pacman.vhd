@@ -61,7 +61,7 @@ architecture RTL of Pacman is
   signal n_sync    : std_logic;
 
 ------------------------------------------------------------------------
-  signal clock_move : std_logic;
+  
 
 begin
 
@@ -79,7 +79,7 @@ begin
     port map (
 
       RESET_N                     => reset_n,
-      CLK                         => clock_move,
+      CLK                         => CLOCK_50,
       BUTTON_UP                   => b_up,
       BUTTON_DOWN                 => b_down,
       BUTTON_RIGHT                => b_right,
@@ -100,7 +100,7 @@ begin
     port map (
 
       RESET_N                      => reset_n,
-      CLOCK                        => clock_move,
+      CLOCK                        => CLOCK_50,
       QUERY_NEARBY_ARRAY           => query_nearby_array,
       QUERY_VIEW                   => query_view,
       REMOVE_CANDY                 => remove_candy,
@@ -152,21 +152,7 @@ begin
 
 ------------------------------------------------------------------------
 
-  timegen : process(CLOCK_50, reset_n)
-    variable counter : integer range 0 to (12500000-1);
-  begin
-    if (reset_n = '0') then
-      counter    := 0;
-      clock_move <= '0';
-    elsif (rising_edge(CLOCK_50)) then
-      if(counter = counter'high) then
-        counter    := 0;
-        clock_move <= not clock_move;
-      else
-        counter    := counter+1;
-      end if;
-    end if;
-  end process;
+
 
 
 end architecture;

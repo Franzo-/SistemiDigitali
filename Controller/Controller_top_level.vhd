@@ -36,6 +36,7 @@ architecture Structural of ControllerTopLevel is
   signal win             : std_logic;
   signal enable          : std_logic;
   signal pause           : std_logic;
+  signal clock_move      : std_logic;
 
 begin  -- architecture Structural
 
@@ -55,6 +56,7 @@ begin  -- architecture Structural
     port map (
       RESET_N       => RESET_N,
       CLOCK         => CLK,
+		CLOCK_MOVE    => clock_move,
       BUTTON_UP     => BUTTON_UP,
       BUTTON_DOWN   => BUTTON_DOWN,
       BUTTON_RIGHT  => BUTTON_RIGHT,
@@ -89,6 +91,7 @@ begin  -- architecture Structural
       port map (
         RESET_N       => RESET_N,
         CLOCK         => CLK,
+		  CLOCK_MOVE    => clock_move,
         CAN_MOVES     => can_moves_array(i),
         MOVE_COMMANDS => MOVE_COMMANDS_ARRAY(i),
         ENABLE        => enable
@@ -110,5 +113,22 @@ begin  -- architecture Structural
       ENABLE_CONTROLLER => enable,
       CURRENT_STATE     => CURRENT_STATE
       );
+		
+  timegen : process(CLK, reset_n)
+    variable counter : integer range 0 to (25000000-1);
+  begin
+    if (reset_n = '0') then
+      counter    := 0;
+      clock_move <= '0';
+    elsif (rising_edge(CLK)) then
+      if(counter = counter'high) then
+        counter    := 0;
+        clock_move <= '1';
+      else
+        counter    := counter+1;
+		  clock_move <= '0';
+      end if;
+    end if;
+  end process;
 
 end architecture Structural;

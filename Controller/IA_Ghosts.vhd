@@ -13,7 +13,8 @@ entity IAGhosts is
     CAN_MOVES : in can_move;
 
     --segnali in uscita        
-    MOVE_COMMANDS : out move_commands
+    MOVE_COMMANDS : out move_commands;
+	 CLOCK_MOVE : in std_logic
     );
 
 end entity IAGhosts;
@@ -43,7 +44,7 @@ begin
       MOVE_COMMANDS.move_left  <= '0';
       MOVE_COMMANDS.move_right <= '0';
 
-      if(ENABLE = '1') then
+      if(ENABLE = '1' and CLOCK_MOVE = '1') then
         -- La direzione può cambiare casualmente quando il fantasmino incontra un
         -- incrocio oppure quando è fermo
         CrossroadCheck : if (is_crossroad(current_direction, CAN_MOVES) or
