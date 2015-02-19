@@ -48,7 +48,13 @@ signal current_state : state_controller_type;
 signal query_view : cell_coordinates;
 signal response_view : map_cell_type;
 
+-- Signal VGA
 ------------------------------------------------------------------------
+
+signal clock_vga : std_logic;
+
+------------------------------------------------------------------------
+signal clock_move : std_logic;
  
 begin 
  
@@ -65,7 +71,7 @@ begin
     port map (
 
     RESET_N => reset_n;
-    CLK  => --TODO see PLL  ;
+    CLK  => clock_move  ;
     BUTTON_UP => b_up  ;
     BUTTON_DOWN => b_down;
     BUTTON_RIGHT => b_right;
@@ -86,7 +92,7 @@ begin
     port map (
 
     RESET_N => reset_n;
-    CLK  => --TODO see PLL  ;
+    CLK  => clock_move ;
     QUERY_NEARBY_ARRAY => query_nearby_array ;
     QUERY_VIEW  => query_view;
     REMOVE_CANDY  => remove_candy;
@@ -99,5 +105,32 @@ begin
       );
 
 ------------------------------------------------------------------------
+
+  PLL : entity work.pll
+    port map (
+		inclk0 => CLOCK_50;
+		c0	=> clock_vga
+	);
+
+------------------------------------------------------------------------
+
+	timegen : process(CLOCK_50, reset_n)
+		variable counter : integer range 0 to (25000000-1)
+	begin
+		if (reset_n = '0') then
+			counter := 0;
+			clock_move <= '0';
+		elsif (rising_edge(CLOCK_50)) then
+			if(counter = counter'high) then
+				counter := 0;
+				clock_move <= '1';
+			else
+				counter := counter+1;
+				clock_move <= '0';			
+			end if;
+		end if;
+	end process;
+	
+-----------------------------------------------------------------------
 
 end architecture;
