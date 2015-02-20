@@ -116,6 +116,14 @@ package view_package is
     color     : color_type)
     return color_type;
 
+  -----------------------------------------------------------------------------
+
+  -- Identifica i pixel interni alla board (mappa + personaggi)
+  function is_in_board (
+    pixel_row : integer;
+    pixel_col : integer)
+    return boolean;
+
 
 end package;
 
@@ -238,6 +246,23 @@ package body view_package is
 
     return sprite_color;
   end function get_from_sprite;
+
+  -----------------------------------------------------------------------------
+
+  function is_in_board (
+    pixel_row : integer;
+    pixel_col : integer)
+    return boolean is variable in_board : boolean := false;
+  begin
+
+    -- TODO: tenere conto dei bordi
+    if (pixel_row < (CELL_SIZE * MAP_ROWS) and
+        pixel_col < (CELL_SIZE * MAP_COLUMNS)) then
+      in_board := true;
+    end if;
+
+    return in_board;
+  end function is_in_board;
 
 
 end package body view_package;

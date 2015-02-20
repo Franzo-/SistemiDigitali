@@ -46,7 +46,7 @@ begin  -- architecture RTL
 
     DisplayEnable : if (DISP_ENABLE = '1') then  --display time
 
-      IsInMap : if (ROW < (CELL_SIZE * MAP_ROWS) and COLUMN < (CELL_SIZE * MAP_COLUMNS)) then
+      BoardPixel : if (is_in_board(ROW, COLUMN)) then
         is_map_pixel := true;
 
         -- pixel coordinates -----> cell coordinates
@@ -83,10 +83,10 @@ begin  -- architecture RTL
         end if MapPixel;
 
       else
-        
-        color_vector <= COLOR_BLACK;        
 
-      end if IsInMap;
+        color_vector <= COLOR_BLACK;
+
+      end if BoardPixel;
 
     else                                --blanking time
 
