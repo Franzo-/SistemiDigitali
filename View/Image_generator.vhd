@@ -75,7 +75,7 @@ begin  -- architecture RTL
           if (CELL_CONTENT.is_wall = '1') then
             color_vector <= COLOR_BLUE;
           elsif (CELL_CONTENT.is_candy = '1') then
-            color_vector <= COLOR_WHITE;
+            color_vector <= get_from_sprite(candy, ROW, COLUMN, COLOR_WHITE);
           else
             color_vector <= COLOR_BLACK;
           end if;

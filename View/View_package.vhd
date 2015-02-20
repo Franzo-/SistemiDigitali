@@ -30,27 +30,64 @@ package view_package is
 	
 	type array_type is array (15 downto 0) of std_logic_vector (15 downto 0); 
 	
-	constant candy : array_type;
-
-	candy( 0) <= "0000000000000000";
-	candy( 1) <= "0000000000000000";
-	candy( 2) <= "0000000000000000";
-	candy( 3) <= "0000000000000000";
-	candy( 4) <= "0000000000000000";
-	candy( 5) <= "0000000000000000";
-	candy( 6) <= "0000000110000000";
-	candy( 7) <= "0000001111000000";
-	candy( 8) <= "0000000110000000";
-	candy( 9) <= "0000000000000000";
-	candy(10) <= "0000000000000000";
-	candy(11) <= "0000000000000000";
-	candy(12) <= "0000000000000000";
-	candy(13) <= "0000000000000000";
-	candy(14) <= "0000000000000000";
-	candy(15) <= "0000000000000000";
-
+	constant candy : array_type := (
+	   "0000000000000000",
+		"0000000000000000",
+		"0000000000000000",
+		"0000000000000000",
+		"0000000000000000",
+		"0000000000000000",
+		"0000000110000000",
+		"0000001111000000",
+		"0000000110000000",
+		"0000000000000000",
+		"0000000000000000",
+		"0000000000000000",
+		"0000000000000000",
+		"0000000000000000",
+		"0000000000000000",
+		"0000000000000000"	
+	);
 	
+		constant pacman : array_type := (
+		"0000000000000000",
+		"0000011111100000",
+		"0001111111111000",
+		"0011111111111100",
+		"0111111111111110",
+		"1111111111111110",
+		"1111111111100000",
+		"1111111000000000",
+		"1111111000000000",
+		"1111111111100000",
+		"1111111111111110",
+		"0111111111111110",
+		"0011111111111100",
+		"0001111111111000",
+		"0000011111100000",
+		"0000000000000000"	
+	);
 	
+			constant ghost : array_type := (
+		"0000000000000000",
+		"0000111111110000",
+		"0111111111111110",
+		"1111111111111111",
+		"1111111111111111",
+		"1111000111100011",
+		"1111000111100011",
+		"1111111111111111",
+		"1111111111111111",
+		"1111111111111111",
+		"1111111111111111",
+		"1111111111111111",
+		"1111111111111111",
+		"1111111111111111",
+		"1101111001111011",
+		"1000110000110001" 	
+	);
+	
+		
 -- SPRITE FANTASMINI, PACMAN, CARAMELLINE, MURI
 -- LETTERE PER LE STRINGHE
 -- TIPO SPRITE, TIPO FONT 
@@ -73,7 +110,8 @@ package view_package is
   function get_from_sprite (
     sprite         : array_type;
     pixel_row      : integer;
-    pixel_col      : integer)
+    pixel_col      : integer;
+	 color          : color_type)
   return color_type;
   
 
@@ -157,12 +195,12 @@ package body view_package is
   begin
 
     case character_cell.cell_character is
-      when PACMAN_CHAR => color_vector := COLOR_YELLOW;
-      when GHOST1_CHAR => color_vector := COLOR_RED;
-      when GHOST2_CHAR => color_vector := COLOR_CYAN;
-      when GHOST3_CHAR => color_vector := COLOR_GREEN;
-      when GHOST4_CHAR => color_vector := COLOR_ORANGE;
-      when others      => color_vector := get_from_sprite(candy, pixel_row, pixel_col);
+      when PACMAN_CHAR => color_vector := get_from_sprite(pacman, pixel_row, pixel_col, COLOR_YELLOW);
+      when GHOST1_CHAR => color_vector := get_from_sprite(ghost, pixel_row, pixel_col, COLOR_RED);
+      when GHOST2_CHAR => color_vector := get_from_sprite(ghost, pixel_row, pixel_col, COLOR_CYAN);
+      when GHOST3_CHAR => color_vector := get_from_sprite(ghost, pixel_row, pixel_col, COLOR_GREEN);
+      when GHOST4_CHAR => color_vector := get_from_sprite(ghost, pixel_row, pixel_col, COLOR_ORANGE);
+      when others      => color_vector := COLOR_BLACK;
     end case;
 
     return color_vector;
@@ -174,7 +212,8 @@ package body view_package is
   function get_from_sprite (
     sprite         : array_type;
     pixel_row      : integer;
-    pixel_col      : integer
+    pixel_col      : integer;
+	 color          : color_type
   )
   return color_type is variable sprite_color : color_type := COLOR_BLACK;
   
@@ -192,7 +231,7 @@ package body view_package is
 	if(sprite_row(j) = '0') then 
 		sprite_color := COLOR_BLACK;
 	else 
-	  sprite_color := COLOR_WHITE;
+	  sprite_color := color;
 	end if;
 	
 	return sprite_color;
