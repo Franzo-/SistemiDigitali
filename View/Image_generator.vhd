@@ -46,40 +46,47 @@ begin  -- architecture RTL
 
     DisplayEnable : if (DISP_ENABLE = '1') then  --display time
 
-      is_map_pixel := true;
+      IsInMap : if (ROW < (CELL_SIZE * MAP_ROWS) and COLUMN < (CELL_SIZE * MAP_COLUMNS)) then
+        is_map_pixel := true;
 
-      -- pixel coordinates -----> cell coordinates
-      cell_row <= ROW / CELL_SIZE;
-      cell_col <= COLUMN / CELL_SIZE;
+        -- pixel coordinates -----> cell coordinates
+        cell_row <= ROW / CELL_SIZE;
+        cell_col <= COLUMN / CELL_SIZE;
 
-      -- Prima si controlla se il pixel fa parte della cella occupata da un personaggio
-      CharacterPixel : for i in CHARACTERS_COORDINATES_ARRAY'range loop
+        -- Prima si controlla se il pixel fa parte della cella occupata da un personaggio
+        CharacterPixel : for i in CHARACTERS_COORDINATES_ARRAY'range loop
 
-        tmp_character := CHARACTERS_COORDINATES_ARRAY(i);
+          tmp_character := CHARACTERS_COORDINATES_ARRAY(i);
 
-        if ((tmp_character.coordinates.row = cell_row) and
-            (tmp_character.coordinates.col = cell_col)) then
-          color_vector <= draw_character_pixel(tmp_character, ROW, COLUMN);
-          is_map_pixel := false;
-        end if;
+          if ((tmp_character.coordinates.row = cell_row) and
+              (tmp_character.coordinates.col = cell_col)) then
+            color_vector <= draw_character_pixel(tmp_character, ROW, COLUMN);
+            is_map_pixel := false;
+          end if;
 
-      end loop CharacterPixel;
+        end loop CharacterPixel;
 
-      -- Se la cella non ha un personaggio, si disegna il contenuto della mappa
-      MapPixel : if (is_map_pixel) then
+        -- Se la cella non ha un personaggio, si disegna il contenuto della mappa
+        MapPixel : if (is_map_pixel) then
 
-        QUERY_CELL.row <= cell_row;
-        QUERY_CELL.col <= cell_col;
+          QUERY_CELL.row <= cell_row;
+          QUERY_CELL.col <= cell_col;
 
-        if (CELL_CONTENT.is_wall = '1') then
-          color_vector <= COLOR_BLUE;
-        elsif (CELL_CONTENT.is_candy = '1') then
-          color_vector <= COLOR_WHITE;
-        else
-          color_vector <= COLOR_BLACK;
-        end if;
+          if (CELL_CONTENT.is_wall = '1') then
+            color_vector <= COLOR_BLUE;
+          elsif (CELL_CONTENT.is_candy = '1') then
+            color_vector <= COLOR_WHITE;
+          else
+            color_vector <= COLOR_BLACK;
+          end if;
 
-      end if MapPixel;
+        end if MapPixel;
+
+      else
+        
+        color_vector <= COLOR_BLACK;        
+
+      end if IsInMap;
 
     else                                --blanking time
 
