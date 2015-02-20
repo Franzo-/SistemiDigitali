@@ -50,8 +50,8 @@ begin  -- architecture RTL
         is_map_pixel := true;
 
         -- pixel coordinates -----> cell coordinates
-        cell_row <= ROW / CELL_SIZE;
-        cell_col <= COLUMN / CELL_SIZE;
+        cell_row <= (ROW - TOP_MARGIN) / CELL_SIZE;
+        cell_col <= (COLUMN - LEFT_MARGIN) / CELL_SIZE;
 
         -- Prima si controlla se il pixel fa parte della cella occupata da un personaggio
         CharacterPixel : for i in CHARACTERS_COORDINATES_ARRAY'range loop
@@ -60,7 +60,7 @@ begin  -- architecture RTL
 
           if ((tmp_character.coordinates.row = cell_row) and
               (tmp_character.coordinates.col = cell_col)) then
-            color_vector <= draw_character_pixel(tmp_character, ROW, COLUMN);
+            color_vector <= draw_character_pixel(tmp_character, ROW - TOP_MARGIN, COLUMN - LEFT_MARGIN);
             is_map_pixel := false;
           end if;
 
@@ -75,7 +75,7 @@ begin  -- architecture RTL
           if (CELL_CONTENT.is_wall = '1') then
             color_vector <= COLOR_BLUE;
           elsif (CELL_CONTENT.is_candy = '1') then
-            color_vector <= get_from_sprite(candy, ROW, COLUMN, COLOR_WHITE);
+            color_vector <= get_from_sprite(candy, ROW - TOP_MARGIN, COLUMN - LEFT_MARGIN, COLOR_WHITE);
           else
             color_vector <= COLOR_BLACK;
           end if;
