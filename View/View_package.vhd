@@ -26,6 +26,31 @@ package view_package is
 
   -----------------------------------------------------------------------------
 
+   -- Sprite Candies
+	
+	type array_type is array (15 downto 0) of std_logic_vector (15 downto 0); 
+	
+	constant candy : array_type;
+
+	candy( 0) <= "0000000000000000";
+	candy( 1) <= "0000000000000000";
+	candy( 2) <= "0000000000000000";
+	candy( 3) <= "0000000000000000";
+	candy( 4) <= "0000000000000000";
+	candy( 5) <= "0000000000000000";
+	candy( 6) <= "0000000110000000";
+	candy( 7) <= "0000001111000000";
+	candy( 8) <= "0000000110000000";
+	candy( 9) <= "0000000000000000";
+	candy(10) <= "0000000000000000";
+	candy(11) <= "0000000000000000";
+	candy(12) <= "0000000000000000";
+	candy(13) <= "0000000000000000";
+	candy(14) <= "0000000000000000";
+	candy(15) <= "0000000000000000";
+
+	
+	
 -- SPRITE FANTASMINI, PACMAN, CARAMELLINE, MURI
 -- LETTERE PER LE STRINGHE
 -- TIPO SPRITE, TIPO FONT 
@@ -44,6 +69,13 @@ package view_package is
     pixel_row      : integer;
     pixel_col      : integer)
     return color_type;
+	 
+  function get_from_sprite (
+    sprite         : array_type;
+    pixel_row      : integer;
+    pixel_col      : integer)
+  return color_type;
+  
 
 end package;
 
@@ -130,10 +162,41 @@ package body view_package is
       when GHOST2_CHAR => color_vector := COLOR_CYAN;
       when GHOST3_CHAR => color_vector := COLOR_GREEN;
       when GHOST4_CHAR => color_vector := COLOR_ORANGE;
-      when others      => color_vector := COLOR_BLACK;
+      when others      => color_vector := get_from_sprite(candy, pixel_row, pixel_col);
     end case;
 
     return color_vector;
   end function draw_character_pixel;
+  
+  
+-----------------------------------------------------------------------------------------
+
+  function get_from_sprite (
+    sprite         : array_type;
+    pixel_row      : integer;
+    pixel_col      : integer
+  )
+  return color_type is variable sprite_color : color_type := COLOR_BLACK;
+  
+  variable i : integer := 0;
+  variable j : integer := 0;
+  variable sprite_row : std_logic_vector(15 downto 0);
+  
+  
+  begin 
+	i:= pixel_row mod CELL_SIZE;
+	j:= pixel_col mod CELL_SIZE;
+	
+	sprite_row := sprite(i);
+	
+	if(sprite_row(j) = '0') then 
+		sprite_color := COLOR_BLACK;
+	else 
+	  sprite_color := COLOR_WHITE;
+	end if;
+	
+	return sprite_color;
+  end function get_from_sprite;
+  
 
 end package body view_package;
