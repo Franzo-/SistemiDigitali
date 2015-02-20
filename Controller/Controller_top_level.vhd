@@ -15,7 +15,7 @@ entity ControllerTopLevel is
     BUTTON_DOWN                 : in std_logic;
     BUTTON_RIGHT                : in std_logic;
     BUTTON_LEFT                 : in std_logic;
-	 PAUSE                       : in std_logic;
+    PAUSE                       : in std_logic;
     CANDY_LEFT                  : in integer range 0 to (MAX_CANDIES - 1);
     CHARACTER_COORDINATES_ARRAY : in character_cell_array;
     RESPONSE_NEARBY_ARRAY       : in cell_nearby_content_array;
@@ -56,7 +56,7 @@ begin  -- architecture Structural
     port map (
       RESET_N       => RESET_N,
       CLOCK         => CLK,
-		TIMER_MOVE    => timer_move,
+      TIMER_MOVE    => timer_move,
       BUTTON_UP     => BUTTON_UP,
       BUTTON_DOWN   => BUTTON_DOWN,
       BUTTON_RIGHT  => BUTTON_RIGHT,
@@ -78,7 +78,7 @@ begin  -- architecture Structural
         RESPONSE              => RESPONSE_NEARBY_ARRAY(i),
         QUERY                 => QUERY_NEARBY_ARRAY(i),
         CAN_MOVES             => can_moves_array(i)
-     
+
         );
 
   end generate;
@@ -88,22 +88,23 @@ begin  -- architecture Structural
   IAEntityIteration : for i in 1 to (NUMBER_OF_CHARACTERS - 1) generate
 
     IAGhosts : entity work.IAGhosts
-	   generic map(
-		  PERSONAL_RANDOM_COUNTER => i
-		)
-		
+      generic map(
+        INDEX => i
+        )
+
       port map (
-        RESET_N       => RESET_N,
-        CLOCK         => CLK,
-		  TIMER_MOVE    => timer_move,
-        CAN_MOVES     => can_moves_array(i),
-        MOVE_COMMANDS => MOVE_COMMANDS_ARRAY(i),
-        ENABLE        => enable,
-		  CHARACTER_COORDINATES => CHARACTER_COORDINATES_ARRAY(i-1).coordinates,
-		  INDEX => i
+        RESET_N               => RESET_N,
+        CLOCK                 => CLK,
+        TIMER_MOVE            => timer_move,
+        CAN_MOVES             => can_moves_array(i),
+        MOVE_COMMANDS         => MOVE_COMMANDS_ARRAY(i),
+        ENABLE                => enable,
+        CHARACTER_COORDINATES => CHARACTER_COORDINATES_ARRAY(i-1).coordinates
         );
 
   end generate;
+
+  -----------------------------------------------------------------------------
 
   FSM_controller : entity work.FSM_controller
     port map (
@@ -117,9 +118,12 @@ begin  -- architecture Structural
       BUTTON_RIGHT      => BUTTON_RIGHT,
       ENABLE_CONTROLLER => enable,
       CURRENT_STATE     => CURRENT_STATE,
-		PAUSE_SIGNAL      => PAUSE
+      PAUSE_SIGNAL      => PAUSE
       );
-		
+
+  -----------------------------------------------------------------------------
+
+  -- Impulso ogni quarto di secondo
   timegen : process(CLK, reset_n)
     variable counter : integer range 0 to (12500000-1);
   begin
@@ -132,7 +136,7 @@ begin  -- architecture Structural
         timer_move <= '1';
       else
         counter    := counter+1;
-		  timer_move <= '0';
+        timer_move <= '0';
       end if;
     end if;
   end process;
