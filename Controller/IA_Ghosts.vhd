@@ -21,13 +21,15 @@ end entity IAGhosts;
 
 architecture RTL of IAGhosts is
 
-  signal current_direction : ghost_direction;
+  
   signal rnd_count_r       : integer range 0 to 3;
 
 begin
 
   Ghost_controller : process(CLOCK, RESET_N)
-
+  
+  variable current_direction : ghost_direction;
+  
   begin
 
     if(RESET_N = '0') then
@@ -35,7 +37,7 @@ begin
       MOVE_COMMANDS.move_up    <= '0';
       MOVE_COMMANDS.move_left  <= '0';
       MOVE_COMMANDS.move_right <= '0';
-      current_direction        <= IDLE;
+      current_direction        := IDLE;
 
     elsif rising_edge(CLOCK) then
 
@@ -50,7 +52,7 @@ begin
         CrossroadCheck : if (is_crossroad(current_direction, CAN_MOVES) or
                              current_direction = IDLE) then
 
-          current_direction <= random_direction(rnd_count_r, CAN_MOVES);
+          current_direction := random_direction(rnd_count_r, CAN_MOVES);
 
         end if CrossroadCheck;
 
@@ -82,11 +84,9 @@ begin
             else
               MOVE_COMMANDS.move_left <= '1';
             end if;
-			 when OTHERS => 
-			   MOVE_COMMANDS.move_up <= '0';
-				MOVE_COMMANDS.move_right <= '0';
-				MOVE_COMMANDS.move_down <= '0';
-				MOVE_COMMANDS.move_left <= '0';
+				
+			 when IDLE => null;
+
         end case;
 
       end if;  --ENABLE

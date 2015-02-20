@@ -5,7 +5,7 @@ use ieee.std_logic_1164.all;
 package pacman_package is
 
   -- Constants
-  constant CELL_SIZE            : positive := 10;  -- pixels
+  constant CELL_SIZE            : positive := 15;  -- pixels
   constant MAP_COLUMNS          : positive := 20;  -- cells
   constant MAP_ROWS             : positive := 20;  -- cells
   constant MAX_CANDIES          : positive := 500;
@@ -94,13 +94,13 @@ package pacman_package is
   type ghost_direction is (UP_DIR, DOWN_DIR, LEFT_DIR, RIGHT_DIR, IDLE);
 
   function is_crossroad (
-    signal current_dir : ghost_direction;
-    signal can_moves   : can_move)
+     current_dir : ghost_direction;
+     can_moves   : can_move)
     return boolean;
 
   function random_direction (
-    signal random_value : integer range 0 to 3;
-    signal can_moves    : can_move)
+     random_value : integer range 0 to 3;
+     can_moves    : can_move)
     return ghost_direction;
 	 
   
