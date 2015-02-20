@@ -15,6 +15,7 @@ entity ControllerTopLevel is
     BUTTON_DOWN                 : in std_logic;
     BUTTON_RIGHT                : in std_logic;
     BUTTON_LEFT                 : in std_logic;
+	 PAUSE                       : in std_logic;
     CANDY_LEFT                  : in integer range 0 to (MAX_CANDIES - 1);
     CHARACTER_COORDINATES_ARRAY : in character_cell_array;
     RESPONSE_NEARBY_ARRAY       : in cell_nearby_content_array;
@@ -35,7 +36,6 @@ architecture Structural of ControllerTopLevel is
   signal game_over       : std_logic;
   signal win             : std_logic;
   signal enable          : std_logic;
-  signal pause           : std_logic;
   signal timer_move      : std_logic;
 
 begin  -- architecture Structural
@@ -109,7 +109,6 @@ begin  -- architecture Structural
     port map (
       RESET_N           => RESET_N,
       CLOCK             => CLK,
-      PAUSE_SIGNAL      => pause,
       GAME_OVER_SIGNAL  => game_over,
       WIN_SIGNAL        => win,
       BUTTON_DOWN       => BUTTON_DOWN,
@@ -117,7 +116,8 @@ begin  -- architecture Structural
       BUTTON_LEFT       => BUTTON_LEFT,
       BUTTON_RIGHT      => BUTTON_RIGHT,
       ENABLE_CONTROLLER => enable,
-      CURRENT_STATE     => CURRENT_STATE
+      CURRENT_STATE     => CURRENT_STATE,
+		PAUSE_SIGNAL      => PAUSE
       );
 		
   timegen : process(CLK, reset_n)

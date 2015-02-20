@@ -90,7 +90,8 @@ begin
       REMOVE_CANDY                => remove_candy,
       QUERY_NEARBY_ARRAY          => query_nearby_array,
       MOVE_COMMANDS_ARRAY         => move_commands_array,
-      CURRENT_STATE               => current_state
+      CURRENT_STATE               => current_state,
+		PAUSE                       => pause
 
       );
 
