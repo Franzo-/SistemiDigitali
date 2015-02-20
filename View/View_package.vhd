@@ -27,6 +27,10 @@ package view_package is
   constant H_PIXELS : integer := 640;
   constant V_PIXELS : integer := 480;
 
+  -- Margini per centrare la board nello schermo
+  constant LEFT_MARGIN : integer := (H_PIXELS/2) - ((MAP_COLUMNS*CELL_SIZE)/2);
+  constant TOP_MARGIN  : integer := (V_PIXELS/2) - ((MAP_ROWS*CELL_SIZE)/2);
+
   -----------------------------------------------------------------------------
 
   -- Sprite Candies
@@ -255,9 +259,10 @@ package body view_package is
     return boolean is variable in_board : boolean := false;
   begin
 
-    -- TODO: tenere conto dei bordi
-    if (pixel_row < (CELL_SIZE * MAP_ROWS) and
-        pixel_col < (CELL_SIZE * MAP_COLUMNS)) then
+    if (pixel_row >= TOP_MARGIN and
+        pixel_row < (TOP_MARGIN + (CELL_SIZE * MAP_ROWS)) and
+        pixel_col >= LEFT_MARGIN and
+        pixel_col < (LEFT_MARGIN + (CELL_SIZE * MAP_COLUMNS))) then
       in_board := true;
     end if;
 
