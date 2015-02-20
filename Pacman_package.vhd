@@ -6,9 +6,9 @@ package pacman_package is
 
   -- Constants
   constant CELL_SIZE            : positive := 16;  -- pixels
-  constant MAP_COLUMNS          : positive := 15;  -- cells
-  constant MAP_ROWS             : positive := 15;  -- cells
-  constant MAX_CANDIES          : positive := 500;
+  constant MAP_COLUMNS          : positive := 26;  -- cells
+  constant MAP_ROWS             : positive := 26;  -- cells
+  --constant MAX_CANDIES          : positive := 500;
   constant NUMBER_OF_CHARACTERS : positive := 5;   -- pacman + ghosts
 
   -----------------------------------------------------------------------------

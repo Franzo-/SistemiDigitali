@@ -13,7 +13,7 @@ entity ViewTopLevel is
     CLOCK                        : in std_logic;
     RESET_N                      : in std_logic;
     --
-    CANDY_LEFT                   : in integer range 0 to (MAX_CANDIES-1);
+    CANDY_LEFT                   : in integer range 0 to 9999;
     --
     RESPONSE_VIEW                : in map_cell_type;
     CHARACTERS_COORDINATES_ARRAY : in character_cell_array;

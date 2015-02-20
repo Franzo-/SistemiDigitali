@@ -16,7 +16,7 @@ entity ControllerTopLevel is
     BUTTON_RIGHT                : in std_logic;
     BUTTON_LEFT                 : in std_logic;
     PAUSE                       : in std_logic;
-    CANDY_LEFT                  : in integer range 0 to (MAX_CANDIES - 1);
+    CANDY_LEFT                  : in integer range 0 to 9999;
     CHARACTER_COORDINATES_ARRAY : in character_cell_array;
     RESPONSE_NEARBY_ARRAY       : in cell_nearby_content_array;
 

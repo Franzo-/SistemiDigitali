@@ -18,7 +18,7 @@ entity ModelTopLevel is
     --
     RESPONSE_NEARBY_ARRAY : out cell_nearby_content_array;
     RESPONSE_VIEW         : out map_cell_type;
-    CANDY_LEFT            : out integer range 0 to (MAX_CANDIES-1);
+    CANDY_LEFT            : out integer range 0 to 9999;
 
     -- MovingParts
     MOVE_COMMANDS_ARRAY          : in  move_commands_array;

@@ -14,7 +14,7 @@ entity MapEntity is
       --
       RESPONSE_NEARBY : out cell_nearby_content_array;
       RESPONSE_VIEW   : out map_cell_type;
-      CANDY_LEFT      : out integer range 0 to (MAX_CANDIES-1)
+      CANDY_LEFT      : out integer range 0 to 9999
       );
 
 end entity MapEntity;
@@ -22,6 +22,7 @@ end entity MapEntity;
 architecture RTL of MapEntity is
   signal map_board     : map_type;
   signal candy_removal : std_logic;
+  signal candy_number : integer range 0 to 9999;
 
 begin
 
@@ -31,18 +32,21 @@ begin
       RESET_N => RESET_N,
       CLK     => CLOCK,
       ENABLE  => candy_removal,
-      COUNT   => CANDY_LEFT
+      COUNT   => CANDY_LEFT,
+		CANDY_NUMBER => candy_number
       );
 
   -----------------------------------------------------------------------------
 
   MapUpdate : process(CLOCK, RESET_N)
     variable selected_cell : map_cell_type;
+	 variable accumulator_candy : integer range 0 to 9999;
   begin
 
     if (RESET_N = '0') then
 
       candy_removal <= '0';
+		accumulator_candy := 0;
 
       for i in 0 to MAP_ROWS-1 loop
         for j in 0 to MAP_COLUMNS-1 loop
@@ -56,10 +60,12 @@ begin
           elsif((i-1) mod 4 = 0) then
             selected_cell.is_candy := '1';
             selected_cell.is_wall  := '0';
+				accumulator_candy := accumulator_candy + 1;
 
           elsif((j-1) mod 4 = 0) then
             selected_cell.is_candy := '1';
             selected_cell.is_wall  := '0';
+				accumulator_candy := accumulator_candy + 1;
 
           else
             selected_cell.is_candy := '0';
@@ -70,6 +76,8 @@ begin
           map_board(i, j) <= selected_cell;
         end loop;
       end loop;
+		
+		candy_number <= accumulator_candy;
 
     -- L'aggiornamento della mappa è sincrono con il clock di sistema  
     elsif (rising_edge(CLOCK)) then
