@@ -24,7 +24,8 @@ entity ControllerTopLevel is
     REMOVE_CANDY        : out cell_coordinates;
     QUERY_NEARBY_ARRAY  : out cell_nearby_array;
     MOVE_COMMANDS_ARRAY : out move_commands_array;
-    CURRENT_STATE       : out state_controller_type
+    CURRENT_STATE       : out state_controller_type;
+    MOUTH_OPEN          : out std_logic
 
     );
 
@@ -63,8 +64,8 @@ begin  -- architecture Structural
       BUTTON_LEFT   => BUTTON_LEFT,
       CAN_MOVES     => can_moves_array(0),
       MOVE_COMMANDS => MOVE_COMMANDS_ARRAY(0),
-      ENABLE        => enable
-
+      ENABLE        => enable,
+      MOUTH_OPEN    => MOUTH_OPEN
       );
 
 -----------------------------------------------------------------------------

@@ -7,9 +7,10 @@ use work.pacman_package.all;
 entity Pacman_controller is
   port
     (
-      CLOCK   : in std_logic;
-      RESET_N : in std_logic;
-      ENABLE  : in std_logic;
+      CLOCK      : in std_logic;
+      RESET_N    : in std_logic;
+      ENABLE     : in std_logic;
+      TIMER_MOVE : in std_logic;
 
       --segnali dei tasti direzionali
       BUTTON_UP    : in std_logic;
@@ -21,12 +22,14 @@ entity Pacman_controller is
       CAN_MOVES     : in  can_move;
       --segnali in uscita        
       MOVE_COMMANDS : out move_commands;
-		TIMER_MOVE : in std_logic
+      MOUTH_OPEN    : out std_logic
       );
 
 end entity Pacman_controller;
 
 architecture my_pacman_controller of pacman_controller is
+
+  signal pacman_mouth_open : std_logic;
 
 begin
 
@@ -40,6 +43,8 @@ begin
       MOVE_COMMANDS.move_left  <= '0';
       MOVE_COMMANDS.move_right <= '0';
 
+      pacman_mouth_open <= '1';
+
 
     elsif rising_edge(CLOCK) then
 
@@ -48,7 +53,7 @@ begin
       MOVE_COMMANDS.move_left  <= '0';
       MOVE_COMMANDS.move_right <= '0';
 
-      if(ENABLE = '1' and TIMER_MOVE = '1') then
+      Moves : if(ENABLE = '1' and TIMER_MOVE = '1') then
         --ad ogni fronte positivo di ck verifico dove deve andare il pacman
         --(ad ogni passo corrisponde la pressione di un tasto)
 
@@ -64,9 +69,16 @@ begin
         elsif(BUTTON_LEFT = '1' and CAN_MOVES.can_move_left = '1') then
           MOVE_COMMANDS.move_left <= '1';
         end if;
-      end if;
+      end if Moves;
+
+      Mouth : if (ENABLE = '1' and TIMER_MOVE = '1') then
+        pacman_mouth_open <= not pacman_mouth_open;
+      end if Mouth;
+
     end if;
   end process;
+
+  MOUTH_OPEN <= pacman_mouth_open;
 
 end architecture;
 

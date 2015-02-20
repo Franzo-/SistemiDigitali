@@ -60,6 +60,11 @@ architecture RTL of Pacman is
   signal n_blank   : std_logic;
   signal n_sync    : std_logic;
 
+-- Signal Controller/View
+-------------------------------------------------------------------------------
+  signal mouth_open : std_logic;
+
+
 ------------------------------------------------------------------------
 
 
@@ -91,8 +96,8 @@ begin
       QUERY_NEARBY_ARRAY          => query_nearby_array,
       MOVE_COMMANDS_ARRAY         => move_commands_array,
       CURRENT_STATE               => current_state,
-      PAUSE                       => pause
-
+      PAUSE                       => pause,
+      MOUTH_OPEN                  => mouth_open
       );
 
 ------------------------------------------------------------------------
@@ -123,6 +128,7 @@ begin
       CANDY_LEFT                   => candy_left,
       RESPONSE_VIEW                => response_view,
       CHARACTERS_COORDINATES_ARRAY => character_coordinates_array,
+      MOUTH_OPEN                   => mouth_open,
       --
       QUERY_VIEW                   => query_view,
       HEX0                         => HEX0,

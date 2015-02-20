@@ -14,6 +14,8 @@ entity ImageGenerator is
     --
     CELL_CONTENT                 : in map_cell_type;
     CHARACTERS_COORDINATES_ARRAY : in character_cell_array;
+    --
+    MOUTH_OPEN                   : in std_logic;
 
     -- Outputs
     RED        : out std_logic_vector(3 downto 0);
@@ -60,7 +62,7 @@ begin  -- architecture RTL
 
           if ((tmp_character.coordinates.row = cell_row) and
               (tmp_character.coordinates.col = cell_col)) then
-            color_vector <= draw_character_pixel(tmp_character, ROW - TOP_MARGIN, COLUMN - LEFT_MARGIN);
+            color_vector <= draw_character_pixel(tmp_character, ROW - TOP_MARGIN, COLUMN - LEFT_MARGIN, MOUTH_OPEN);
             is_map_pixel := false;
           end if;
 

@@ -59,7 +59,7 @@ package view_package is
     "0000000000000000"
     );
 
-  constant pacman : array_type := (
+  constant pacman_opened : array_type := (
     "0000000000000000",
     "0000011111100000",
     "0001111111111000",
@@ -70,6 +70,25 @@ package view_package is
     "1111111000000000",
     "1111111000000000",
     "1111111111100000",
+    "1111111111111110",
+    "0111111111111110",
+    "0011111111111100",
+    "0001111111111000",
+    "0000011111100000",
+    "0000000000000000"
+    );
+
+  constant pacman_closed : array_type := (
+    "0000000000000000",
+    "0000011111100000",
+    "0001111111111000",
+    "0011111111111100",
+    "0111111111111110",
+    "1111111111111110",
+    "1111111111111110",
+    "1111111111111110",
+    "1111111110000000",
+    "1111111111111110",
     "1111111111111110",
     "0111111111111110",
     "0011111111111100",
@@ -110,7 +129,8 @@ package view_package is
   function draw_character_pixel (
     character_cell : character_cell_type;
     pixel_row      : integer;
-    pixel_col      : integer)
+    pixel_col      : integer;
+    pacman_mouth   : std_logic)
     return color_type;
 
   function get_from_sprite (
@@ -204,12 +224,19 @@ package body view_package is
   function draw_character_pixel (
     character_cell : character_cell_type;
     pixel_row      : integer;
-    pixel_col      : integer)
+    pixel_col      : integer;
+    pacman_mouth   : std_logic)
     return color_type is variable color_vector : color_type;
   begin
 
     case character_cell.cell_character is
-      when PACMAN_CHAR => color_vector := get_from_sprite(pacman, pixel_row, pixel_col, COLOR_YELLOW);
+      when PACMAN_CHAR =>
+        if (pacman_mouth = '1') then
+          color_vector := get_from_sprite(pacman_opened, pixel_row, pixel_col, COLOR_YELLOW);
+        else
+          color_vector := get_from_sprite(pacman_closed, pixel_row, pixel_col, COLOR_YELLOW);
+        end if;
+
       when GHOST1_CHAR => color_vector := get_from_sprite(ghost, pixel_row, pixel_col, COLOR_RED);
       when GHOST2_CHAR => color_vector := get_from_sprite(ghost, pixel_row, pixel_col, COLOR_CYAN);
       when GHOST3_CHAR => color_vector := get_from_sprite(ghost, pixel_row, pixel_col, COLOR_GREEN);

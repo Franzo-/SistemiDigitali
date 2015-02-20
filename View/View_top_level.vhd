@@ -17,6 +17,8 @@ entity ViewTopLevel is
     --
     RESPONSE_VIEW                : in map_cell_type;
     CHARACTERS_COORDINATES_ARRAY : in character_cell_array;
+    --
+    MOUTH_OPEN                   : in std_logic;
 
     -- Outputs
     QUERY_VIEW : out cell_coordinates;
@@ -84,6 +86,7 @@ begin  -- architecture Structural
       COLUMN                       => column,
       CELL_CONTENT                 => RESPONSE_VIEW,
       CHARACTERS_COORDINATES_ARRAY => CHARACTERS_COORDINATES_ARRAY,
+      MOUTH_OPEN                   => MOUTH_OPEN,
       RED                          => VGA_R,
       GREEN                        => VGA_G,
       BLUE                         => VGA_B,
