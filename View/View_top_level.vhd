@@ -13,7 +13,7 @@ entity ViewTopLevel is
     CLOCK                        : in std_logic;
     RESET_N                      : in std_logic;
     --
-    CANDY_LEFT                   : in integer range 0 to 9999;
+    CANDY_LEFT                   : in candy_count_type;
     --
     RESPONSE_VIEW                : in map_cell_type;
     CHARACTERS_COORDINATES_ARRAY : in character_cell_array;
@@ -100,26 +100,5 @@ begin  -- architecture Structural
       HEX2       => HEX2,
       HEX3       => HEX3
       );
-
-------------------------------------------------------------------------
-
---  HW_IMAGE_GENERATOR : entity work.hw_image_generator
---    generic map (
---      pixels_x => 50,
---      pixels_y => 50
---      )
---
---    port map (
---      disp_ena => disp_ena,
---      column   => column,
---      row      => row,
---      red      => VGA_R,
---      green    => VGA_G,
---      blue     => VGA_B
---      );
-
-
-
-
 
 end architecture Structural;

@@ -11,7 +11,7 @@ use work.pacman_package.all;
 entity SevenSegEntity is
   port
     (
-      CANDY_LEFT : in  integer range 0 to 9999;
+      CANDY_LEFT : in  candy_count_type;
       HEX0       : out std_logic_vector(6 downto 0);
       HEX1       : out std_logic_vector(6 downto 0);
       HEX2       : out std_logic_vector(6 downto 0);

@@ -148,7 +148,7 @@ package body view_package is
 
   procedure seg_ctrl (signal number : in integer; signal digit1, digit2, digit3, digit4 : out integer range 0 to 9) is
 
-    variable temp : integer range 0 to 9999;
+    variable temp : candy_count_type;
     variable d1   : integer range 0 to 9;
     variable d2   : integer range 0 to 9;
     variable d3   : integer range 0 to 9;

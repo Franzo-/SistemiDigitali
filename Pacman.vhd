@@ -34,7 +34,7 @@ architecture RTL of Pacman is
 
   signal reset_n, pause                : std_logic;
   signal b_up, b_down, b_right, b_left : std_logic;
-  signal candy_left                    : integer range 0 to 9999;
+  signal candy_left                    : candy_count_type;
   signal character_coordinates_array   : character_cell_array;
   signal response_nearby_array         : cell_nearby_content_array;
   signal remove_candy                  : cell_coordinates;
@@ -61,7 +61,7 @@ architecture RTL of Pacman is
   signal n_sync    : std_logic;
 
 ------------------------------------------------------------------------
-  
+
 
 begin
 
@@ -91,7 +91,7 @@ begin
       QUERY_NEARBY_ARRAY          => query_nearby_array,
       MOVE_COMMANDS_ARRAY         => move_commands_array,
       CURRENT_STATE               => current_state,
-		PAUSE                       => pause
+      PAUSE                       => pause
 
       );
 

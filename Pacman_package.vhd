@@ -11,6 +11,11 @@ package pacman_package is
 
   -----------------------------------------------------------------------------
 
+  -- Tipo per il candy counter
+  subtype candy_count_type is integer range 0 to 9999;
+
+  -----------------------------------------------------------------------------
+
   -- Map declarations
   type map_cell_type is record
     is_wall  : std_logic;
