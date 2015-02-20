@@ -5,10 +5,8 @@ use ieee.std_logic_1164.all;
 package pacman_package is
 
   -- Constants
-  constant CELL_SIZE            : positive := 16;  -- pixels
   constant MAP_COLUMNS          : positive := 26;  -- cells
   constant MAP_ROWS             : positive := 26;  -- cells
-  --constant MAX_CANDIES          : positive := 500;
   constant NUMBER_OF_CHARACTERS : positive := 5;   -- pacman + ghosts
 
   -----------------------------------------------------------------------------
@@ -94,18 +92,18 @@ package pacman_package is
   type ghost_direction is (UP_DIR, DOWN_DIR, LEFT_DIR, RIGHT_DIR, IDLE);
 
   function is_crossroad (
-     current_dir : ghost_direction;
-     can_moves   : can_move)
+    current_dir : ghost_direction;
+    can_moves   : can_move)
     return boolean;
 
   function random_direction (
-     random_value : integer ;
-     can_moves    : can_move;
-	  character_coordinates : cell_coordinates;
-	  index : integer)
+    random_value          : integer;
+    can_moves             : can_move;
+    character_coordinates : cell_coordinates;
+    index                 : integer)
     return ghost_direction;
-	 
-  
+
+
 
   -----------------------------------------------------------------------------
 
@@ -116,8 +114,8 @@ package pacman_package is
     );
 
   constant GHOSTS_RESET_POS : cell_coordinates := (
-    col =>  1,
-    row =>  MAP_ROWS - 2 
+    col => 1,
+    row => MAP_ROWS - 2
     );
 
 
@@ -157,14 +155,14 @@ package body pacman_package is
 
   -- Genera una direzione casuale quando il fantasmino è a un incrocio
   function random_direction (
-    random_value : integer ;
-    can_moves    : can_move;
-	 character_coordinates : cell_coordinates;
-	 index : integer)
+    random_value          : integer;
+    can_moves             : can_move;
+    character_coordinates : cell_coordinates;
+    index                 : integer)
     return ghost_direction is variable direction : ghost_direction := IDLE;
   begin  -- function random_direction
-	 
-    case (character_coordinates.row * random_value + character_coordinates.col * (index+1))  mod 4 is
+
+    case (character_coordinates.row * random_value + character_coordinates.col * (index+1)) mod 4 is
       when 0 =>
         if (can_moves.can_move_up = '1') then
           direction := UP_DIR;

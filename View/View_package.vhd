@@ -20,77 +20,78 @@ package view_package is
 
   -----------------------------------------------------------------------------
 
+  -- Pixel per cella
+  constant CELL_SIZE : positive := 16;
+
   -- Costanti della risoluzione video
   constant H_PIXELS : integer := 640;
   constant V_PIXELS : integer := 480;
 
   -----------------------------------------------------------------------------
 
-   -- Sprite Candies
-	
-	type array_type is array (15 downto 0) of std_logic_vector (15 downto 0); 
-	
-	constant candy : array_type := (
-	   "0000000000000000",
-		"0000000000000000",
-		"0000000000000000",
-		"0000000000000000",
-		"0000000000000000",
-		"0000000000000000",
-		"0000000110000000",
-		"0000001111000000",
-		"0000000110000000",
-		"0000000000000000",
-		"0000000000000000",
-		"0000000000000000",
-		"0000000000000000",
-		"0000000000000000",
-		"0000000000000000",
-		"0000000000000000"	
-	);
-	
-		constant pacman : array_type := (
-		"0000000000000000",
-		"0000011111100000",
-		"0001111111111000",
-		"0011111111111100",
-		"0111111111111110",
-		"1111111111111110",
-		"1111111111100000",
-		"1111111000000000",
-		"1111111000000000",
-		"1111111111100000",
-		"1111111111111110",
-		"0111111111111110",
-		"0011111111111100",
-		"0001111111111000",
-		"0000011111100000",
-		"0000000000000000"	
-	);
-	
-			constant ghost : array_type := (
-		"0000000000000000",
-		"0000111111110000",
-		"0111111111111110",
-		"1111111111111111",
-		"1111111111111111",
-		"1111000111100011",
-		"1111000111100011",
-		"1111111111111111",
-		"1111111111111111",
-		"1111111111111111",
-		"1111111111111111",
-		"1111111111111111",
-		"1111111111111111",
-		"1111111111111111",
-		"1101111001111011",
-		"1000110000110001" 	
-	);
-	
-		
--- SPRITE FANTASMINI, PACMAN, CARAMELLINE, MURI
--- LETTERE PER LE STRINGHE
--- TIPO SPRITE, TIPO FONT 
+  -- Sprite Candies
+  -- SPRITE FANTASMINI, PACMAN, CARAMELLINE, MURI
+  -- LETTERE PER LE STRINGHE
+  -- TIPO SPRITE, TIPO FONT 
+
+  type array_type is array (15 downto 0) of std_logic_vector (15 downto 0);
+
+  constant candy : array_type := (
+    "0000000000000000",
+    "0000000000000000",
+    "0000000000000000",
+    "0000000000000000",
+    "0000000000000000",
+    "0000000000000000",
+    "0000000110000000",
+    "0000001111000000",
+    "0000000110000000",
+    "0000000000000000",
+    "0000000000000000",
+    "0000000000000000",
+    "0000000000000000",
+    "0000000000000000",
+    "0000000000000000",
+    "0000000000000000"
+    );
+
+  constant pacman : array_type := (
+    "0000000000000000",
+    "0000011111100000",
+    "0001111111111000",
+    "0011111111111100",
+    "0111111111111110",
+    "1111111111111110",
+    "1111111111100000",
+    "1111111000000000",
+    "1111111000000000",
+    "1111111111100000",
+    "1111111111111110",
+    "0111111111111110",
+    "0011111111111100",
+    "0001111111111000",
+    "0000011111100000",
+    "0000000000000000"
+    );
+
+  constant ghost : array_type := (
+    "0000000000000000",
+    "0000111111110000",
+    "0111111111111110",
+    "1111111111111111",
+    "1111111111111111",
+    "1111000111100011",
+    "1111000111100011",
+    "1111111111111111",
+    "1111111111111111",
+    "1111111111111111",
+    "1111111111111111",
+    "1111111111111111",
+    "1111111111111111",
+    "1111111111111111",
+    "1101111001111011",
+    "1000110000110001"
+    );
 
   -----------------------------------------------------------------------------
 
@@ -101,19 +102,20 @@ package view_package is
 
   -----------------------------------------------------------------------------
 
+  -- Funzioni per il disegno dei personaggi su VGA
   function draw_character_pixel (
     character_cell : character_cell_type;
     pixel_row      : integer;
     pixel_col      : integer)
     return color_type;
-	 
+
   function get_from_sprite (
-    sprite         : array_type;
-    pixel_row      : integer;
-    pixel_col      : integer;
-	 color          : color_type)
-  return color_type;
-  
+    sprite    : array_type;
+    pixel_row : integer;
+    pixel_col : integer;
+    color     : color_type)
+    return color_type;
+
 
 end package;
 
@@ -205,37 +207,37 @@ package body view_package is
 
     return color_vector;
   end function draw_character_pixel;
-  
-  
+
+
 -----------------------------------------------------------------------------------------
 
   function get_from_sprite (
-    sprite         : array_type;
-    pixel_row      : integer;
-    pixel_col      : integer;
-	 color          : color_type
-  )
-  return color_type is variable sprite_color : color_type := COLOR_BLACK;
-  
-  variable i : integer := 0;
-  variable j : integer := 0;
-  variable sprite_row : std_logic_vector(15 downto 0);
-  
-  
-  begin 
-	i:= pixel_row mod CELL_SIZE;
-	j:= pixel_col mod CELL_SIZE;
-	
-	sprite_row := sprite(i);
-	
-	if(sprite_row(j) = '0') then 
-		sprite_color := COLOR_BLACK;
-	else 
-	  sprite_color := color;
-	end if;
-	
-	return sprite_color;
+    sprite    : array_type;
+    pixel_row : integer;
+    pixel_col : integer;
+    color     : color_type
+    )
+    return color_type is variable sprite_color : color_type := COLOR_BLACK;
+
+                         variable i          : integer := 0;
+                         variable j          : integer := 0;
+                         variable sprite_row : std_logic_vector(15 downto 0);
+
+
+  begin
+    i := pixel_row mod CELL_SIZE;
+    j := pixel_col mod CELL_SIZE;
+
+    sprite_row := sprite(i);
+
+    if(sprite_row(j) = '0') then
+      sprite_color := COLOR_BLACK;
+    else
+      sprite_color := color;
+    end if;
+
+    return sprite_color;
   end function get_from_sprite;
-  
+
 
 end package body view_package;
