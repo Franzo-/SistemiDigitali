@@ -21,7 +21,7 @@ entity Pacman_controller is
       CAN_MOVES     : in  can_move;
       --segnali in uscita        
       MOVE_COMMANDS : out move_commands;
-		CLOCK_MOVE : in std_logic
+		TIMER_MOVE : in std_logic
       );
 
 end entity Pacman_controller;
@@ -48,7 +48,7 @@ begin
       MOVE_COMMANDS.move_left  <= '0';
       MOVE_COMMANDS.move_right <= '0';
 
-      if(ENABLE = '1' and CLOCK_MOVE = '1') then
+      if(ENABLE = '1' and TIMER_MOVE = '1') then
         --ad ogni fronte positivo di ck verifico dove deve andare il pacman
         --(ad ogni passo corrisponde la pressione di un tasto)
 

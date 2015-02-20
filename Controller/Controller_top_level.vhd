@@ -56,7 +56,7 @@ begin  -- architecture Structural
     port map (
       RESET_N       => RESET_N,
       CLOCK         => CLK,
-		CLOCK_MOVE    => timer_move,
+		TIMER_MOVE    => timer_move,
       BUTTON_UP     => BUTTON_UP,
       BUTTON_DOWN   => BUTTON_DOWN,
       BUTTON_RIGHT  => BUTTON_RIGHT,
@@ -78,7 +78,7 @@ begin  -- architecture Structural
         RESPONSE              => RESPONSE_NEARBY_ARRAY(i),
         QUERY                 => QUERY_NEARBY_ARRAY(i),
         CAN_MOVES             => can_moves_array(i)
-
+     
         );
 
   end generate;
@@ -88,13 +88,19 @@ begin  -- architecture Structural
   IAEntityIteration : for i in 1 to (NUMBER_OF_CHARACTERS - 1) generate
 
     IAGhosts : entity work.IAGhosts
+	   generic map(
+		  PERSONAL_RANDOM_COUNTER => i
+		)
+		
       port map (
         RESET_N       => RESET_N,
         CLOCK         => CLK,
-		  CLOCK_MOVE    => timer_move,
+		  TIMER_MOVE    => timer_move,
         CAN_MOVES     => can_moves_array(i),
         MOVE_COMMANDS => MOVE_COMMANDS_ARRAY(i),
-        ENABLE        => enable
+        ENABLE        => enable,
+		  CHARACTER_COORDINATES => CHARACTER_COORDINATES_ARRAY(i-1).coordinates,
+		  INDEX => i
         );
 
   end generate;
@@ -115,7 +121,7 @@ begin  -- architecture Structural
       );
 		
   timegen : process(CLK, reset_n)
-    variable counter : integer range 0 to (25000000-1);
+    variable counter : integer range 0 to (12500000-1);
   begin
     if (reset_n = '0') then
       counter    := 0;
