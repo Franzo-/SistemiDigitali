@@ -29,61 +29,66 @@ architecture my_FSM_Controller of FSM_Controller is
 
 
   signal state : state_controller_type;
+  signal next_state : state_controller_type;
+  
 
 begin
 
-  process(CLOCK, RESET_N)
-  begin
-
-    if (RESET_N = '0') then
-      --al reset riparto dalla schermata iniziale e disattivo i controller
-      state             <= START_SCREEN;
-      ENABLE_CONTROLLER <= '0';
-      CURRENT_STATE     <= state;       --START_SCREEN
+	CURRENT_STATE  <= state; --assegnamento concorrente
 
 
-    elsif (rising_edge(CLOCK)) then
+-------------------------------------------------------	
+	State_update : process (CLOCK, RESET_N)
+	begin
+		if (RESET_N = '0') then
+			state <= START_SCREEN;
+		elsif rising_edge(CLOCK) then
+			state<= next_state;
+			
+		end if;
+	end process;
+	
+-------------------------------------------------------
+	
+	OutputAndNextState : process(state, BUTTON_DOWN,BUTTON_LEFT,BUTTON_RIGHT,BUTTON_UP,PAUSE_SIGNAL,WIN_SIGNAL,GAME_OVER_SIGNAL)
+	begin
 
+		ENABLE_CONTROLLER <= '0';
+		next_state <= state;
 
       case (state) is
 
         --nella schermata iniziale l'automa è sensibile alla pressione dei tasti direzionali
         when START_SCREEN =>
-
+				ENABLE_CONTROLLER <= '0';
+				
           if (BUTTON_DOWN = '1' or BUTTON_UP = '1'
               or BUTTON_LEFT = '1' or BUTTON_RIGHT = '1') then
-            state             <= PLAYING;
-            ENABLE_CONTROLLER <= '1';
-            CURRENT_STATE     <= state;  --PLAYING
+					next_state  <= PLAYING;
+
           end if;
 
         when PLAYING =>
+				ENABLE_CONTROLLER <= '1';
           --durante il gioco, l'automa cambia stato se viene premuto il tasto di pausa, se il pacman 
           -- collide con un fantasma, o se abbiamo finito le caramelle
           if(PAUSE_SIGNAL = '1') then
-            state             <= PAUSE;
-            ENABLE_CONTROLLER <= '0';
-            CURRENT_STATE     <= state;  --PAUSE
+            next_state  <= PAUSE;
 
           elsif (WIN_SIGNAL = '1') then
-            state             <= WIN;
-            ENABLE_CONTROLLER <= '0';
-            CURRENT_STATE     <= state;  --WIN
-
+            next_state  <= WIN;
+           
           elsif (GAME_OVER_SIGNAL = '1') then
-            state             <= GAME_OVER;
-            ENABLE_CONTROLLER <= '0';
-            CURRENT_STATE     <= state;  --GAME_OVER        
+            next_state   <= GAME_OVER;
 
           end if;
 
         when PAUSE =>
-                                         -- durante la pausa per ricominciare a giocare basta disattivare l'interruttore 
+            ENABLE_CONTROLLER <= '0';        -- durante la pausa per ricominciare a giocare basta disattivare l'interruttore 
                                          -- sulla FPGA (PAUSE_SIGNAL ='0')
           if(PAUSE_SIGNAL = '0') then
-            state             <= PLAYING;
-            ENABLE_CONTROLLER <= '1';
-            CURRENT_STATE     <= state;  --PLAYING  
+            next_state  <= PLAYING;
+          
           end if;
 
         when WIN | GAME_OVER =>
@@ -91,15 +96,10 @@ begin
                                         --e inviano semplicemente l'enumerativo alla view. stoppiamo tutti i movimenti
           ENABLE_CONTROLLER <= '0';
 
-          if(state = WIN) then
-            CURRENT_STATE <= state;
-          elsif (state = GAME_OVER) then
-            CURRENT_STATE <= state;
-          end if;
-
       end case;
 
-    end if;
   end process;
+
+-------------------------------------------------------	
 
 end architecture;
