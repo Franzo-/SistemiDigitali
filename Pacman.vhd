@@ -62,7 +62,8 @@ architecture RTL of Pacman is
 
 -- Signal Controller/View
 -------------------------------------------------------------------------------
-  signal mouth_open : std_logic;
+  signal mouth_open       : std_logic;
+  signal pacman_direction : character_direction;
 
 
 ------------------------------------------------------------------------
@@ -97,7 +98,8 @@ begin
       MOVE_COMMANDS_ARRAY         => move_commands_array,
       CURRENT_STATE               => current_state,
       PAUSE                       => pause,
-      MOUTH_OPEN                  => mouth_open
+      MOUTH_OPEN                  => mouth_open,
+      PACMAN_DIRECTION            => pacman_direction
       );
 
 ------------------------------------------------------------------------
@@ -129,6 +131,7 @@ begin
       RESPONSE_VIEW                => response_view,
       CHARACTERS_COORDINATES_ARRAY => character_coordinates_array,
       MOUTH_OPEN                   => mouth_open,
+      PACMAN_DIRECTION             => pacman_direction,
       --
       QUERY_VIEW                   => query_view,
       HEX0                         => HEX0,

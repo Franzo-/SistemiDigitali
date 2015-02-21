@@ -33,7 +33,7 @@ begin
 
   Ghost_controller : process(CLOCK, RESET_N)
 
-    variable current_direction : ghost_direction;
+    variable current_direction : character_direction;
 
   begin
 
@@ -107,20 +107,20 @@ begin
 
   -- Random number generator
   process(CLOCK)
-    
+
     variable rand_temp : std_logic_vector(31 downto 0) := (31 => '1', others => '0');
     variable temp      : std_logic                     := '0';
 
   begin
-    
+
     if(rising_edge(CLOCK)) then
       temp                   := rand_temp(31) xor rand_temp(30);
       rand_temp(31 downto 1) := rand_temp(30 downto 0);
-      rand_temp(0)           := temp;      
+      rand_temp(0)           := temp;
     end if;
-    
+
     rnd_count_r <= to_integer(unsigned (rand_temp));
-    
+
   end process;
 
 end architecture;

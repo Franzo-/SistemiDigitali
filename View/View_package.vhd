@@ -38,9 +38,9 @@ package view_package is
   -- LETTERE PER LE STRINGHE
   -- TIPO SPRITE, TIPO FONT 
 
-  type array_type is array (15 downto 0) of std_logic_vector (15 downto 0);
+  type sprite_matrix is array (0 to CELL_SIZE-1) of std_logic_vector (0 to CELL_SIZE-1);
 
-  constant candy : array_type := (
+  constant candy : sprite_matrix := (
     "0000000000000000",
     "0000000000000000",
     "0000000000000000",
@@ -59,7 +59,7 @@ package view_package is
     "0000000000000000"
     );
 
-  constant pacman_opened : array_type := (
+  constant pacman_opened : sprite_matrix := (
     "0000000000000000",
     "0000011111100000",
     "0001111111111000",
@@ -78,7 +78,7 @@ package view_package is
     "0000000000000000"
     );
 
-  constant pacman_closed : array_type := (
+  constant pacman_closed : sprite_matrix := (
     "0000000000000000",
     "0000011111100000",
     "0001111111111000",
@@ -97,7 +97,7 @@ package view_package is
     "0000000000000000"
     );
 
-  constant ghost : array_type := (
+  constant ghost : sprite_matrix := (
     "0000000000000000",
     "0000111111110000",
     "0111111111111110",
@@ -127,17 +127,27 @@ package view_package is
 
   -- Funzioni per il disegno dei personaggi su VGA
   function draw_character_pixel (
-    character_cell : character_cell_type;
-    pixel_row      : integer;
-    pixel_col      : integer;
-    pacman_mouth   : std_logic)
+    character_cell   : character_cell_type;
+    pixel_row        : integer;
+    pixel_col        : integer;
+    pacman_mouth     : std_logic;
+    pacman_direction : character_direction)
     return color_type;
 
   function get_from_sprite (
-    sprite    : array_type;
+    sprite    : sprite_matrix;
     pixel_row : integer;
     pixel_col : integer;
     color     : color_type)
+    return color_type;
+
+  function get_from_pacman_sprite (
+    sprite    : sprite_matrix;
+    pixel_row : integer;
+    pixel_col : integer;
+    color     : color_type;
+    direction : character_direction
+    )
     return color_type;
 
   -----------------------------------------------------------------------------
@@ -222,19 +232,20 @@ package body view_package is
 
   -- Restituisce il pixel della sprite del personaggio richiesto
   function draw_character_pixel (
-    character_cell : character_cell_type;
-    pixel_row      : integer;
-    pixel_col      : integer;
-    pacman_mouth   : std_logic)
+    character_cell   : character_cell_type;
+    pixel_row        : integer;
+    pixel_col        : integer;
+    pacman_mouth     : std_logic;
+    pacman_direction : character_direction)
     return color_type is variable color_vector : color_type;
   begin
 
     case character_cell.cell_character is
       when PACMAN_CHAR =>
         if (pacman_mouth = '1') then
-          color_vector := get_from_sprite(pacman_opened, pixel_row, pixel_col, COLOR_YELLOW);
+          color_vector := get_from_pacman_sprite(pacman_opened, pixel_row, pixel_col, COLOR_YELLOW, pacman_direction);
         else
-          color_vector := get_from_sprite(pacman_closed, pixel_row, pixel_col, COLOR_YELLOW);
+          color_vector := get_from_pacman_sprite(pacman_closed, pixel_row, pixel_col, COLOR_YELLOW, pacman_direction);
         end if;
 
       when GHOST1_CHAR => color_vector := get_from_sprite(ghost, pixel_row, pixel_col, COLOR_RED);
@@ -251,7 +262,7 @@ package body view_package is
 -----------------------------------------------------------------------------------------
 
   function get_from_sprite (
-    sprite    : array_type;
+    sprite    : sprite_matrix;
     pixel_row : integer;
     pixel_col : integer;
     color     : color_type
@@ -277,6 +288,47 @@ package body view_package is
 
     return sprite_color;
   end function get_from_sprite;
+
+  -----------------------------------------------------------------------------
+
+  function get_from_pacman_sprite (
+    sprite    : sprite_matrix;
+    pixel_row : integer;
+    pixel_col : integer;
+    color     : color_type;
+    direction : character_direction
+    )
+    return color_type is variable sprite_color : color_type := COLOR_BLACK;
+
+                         variable i          : integer := 0;
+                         variable j          : integer := 0;
+                         variable sprite_row : std_logic_vector(15 downto 0);
+
+
+  begin
+
+    case direction is
+      when UP_DIR => j := pixel_row mod CELL_SIZE;
+                     i := pixel_col mod CELL_SIZE;
+      when DOWN_DIR => j := pixel_row mod CELL_SIZE;
+                       i := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
+      when LEFT_DIR => i := pixel_row mod CELL_SIZE;
+                       j := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
+      when RIGHT_DIR => i := pixel_row mod CELL_SIZE;
+                        j := pixel_col mod CELL_SIZE;
+      when others => null;
+    end case;
+
+    sprite_row := sprite(i);
+
+    if(sprite_row(j) = '0') then
+      sprite_color := COLOR_BLACK;
+    else
+      sprite_color := color;
+    end if;
+
+    return sprite_color;
+  end function get_from_pacman_sprite;
 
   -----------------------------------------------------------------------------
 

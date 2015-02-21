@@ -25,7 +25,8 @@ entity ControllerTopLevel is
     QUERY_NEARBY_ARRAY  : out cell_nearby_array;
     MOVE_COMMANDS_ARRAY : out move_commands_array;
     CURRENT_STATE       : out state_controller_type;
-    MOUTH_OPEN          : out std_logic
+    MOUTH_OPEN          : out std_logic;
+    PACMAN_DIRECTION    : out character_direction
 
     );
 
@@ -55,17 +56,18 @@ begin  -- architecture Structural
 
   Pacman_controller : entity work.Pacman_controller
     port map (
-      RESET_N       => RESET_N,
-      CLOCK         => CLK,
-      TIMER_MOVE    => timer_move,
-      BUTTON_UP     => BUTTON_UP,
-      BUTTON_DOWN   => BUTTON_DOWN,
-      BUTTON_RIGHT  => BUTTON_RIGHT,
-      BUTTON_LEFT   => BUTTON_LEFT,
-      CAN_MOVES     => can_moves_array(0),
-      MOVE_COMMANDS => MOVE_COMMANDS_ARRAY(0),
-      ENABLE        => enable,
-      MOUTH_OPEN    => MOUTH_OPEN
+      RESET_N          => RESET_N,
+      CLOCK            => CLK,
+      TIMER_MOVE       => timer_move,
+      BUTTON_UP        => BUTTON_UP,
+      BUTTON_DOWN      => BUTTON_DOWN,
+      BUTTON_RIGHT     => BUTTON_RIGHT,
+      BUTTON_LEFT      => BUTTON_LEFT,
+      CAN_MOVES        => can_moves_array(0),
+      MOVE_COMMANDS    => MOVE_COMMANDS_ARRAY(0),
+      ENABLE           => enable,
+      MOUTH_OPEN       => MOUTH_OPEN,
+      PACMAN_DIRECTION => PACMAN_DIRECTION
       );
 
 -----------------------------------------------------------------------------

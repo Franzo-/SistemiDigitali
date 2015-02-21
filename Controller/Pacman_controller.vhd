@@ -19,10 +19,11 @@ entity Pacman_controller is
       BUTTON_LEFT  : in std_logic;
 
       --segnali che indicano se il pacman puo muoversi nella data direzione
-      CAN_MOVES     : in  can_move;
+      CAN_MOVES        : in  can_move;
       --segnali in uscita        
-      MOVE_COMMANDS : out move_commands;
-      MOUTH_OPEN    : out std_logic
+      MOVE_COMMANDS    : out move_commands;
+      MOUTH_OPEN       : out std_logic;
+      PACMAN_DIRECTION : out character_direction
       );
 
 end entity Pacman_controller;
@@ -30,6 +31,7 @@ end entity Pacman_controller;
 architecture my_pacman_controller of pacman_controller is
 
   signal pacman_mouth_open : std_logic;
+  signal direction         : character_direction;
 
 begin
 
@@ -44,6 +46,7 @@ begin
       MOVE_COMMANDS.move_right <= '0';
 
       pacman_mouth_open <= '1';
+      direction         <= RIGHT_DIR;
 
 
     elsif rising_edge(CLOCK) then
@@ -59,15 +62,19 @@ begin
 
         if(BUTTON_UP = '1' and CAN_MOVES.can_move_up = '1') then
           MOVE_COMMANDS.move_up <= '1';
+          direction             <= UP_DIR;
 
         elsif(BUTTON_DOWN = '1' and CAN_MOVES.can_move_down = '1') then
           MOVE_COMMANDS.move_down <= '1';
+          direction               <= DOWN_DIR;
 
         elsif(BUTTON_RIGHT = '1' and CAN_MOVES.can_move_right = '1') then
           MOVE_COMMANDS.move_right <= '1';
+          direction                <= RIGHT_DIR;
 
         elsif(BUTTON_LEFT = '1' and CAN_MOVES.can_move_left = '1') then
           MOVE_COMMANDS.move_left <= '1';
+          direction               <= LEFT_DIR;
         end if;
       end if Moves;
 
@@ -78,7 +85,8 @@ begin
     end if;
   end process;
 
-  MOUTH_OPEN <= pacman_mouth_open;
+  MOUTH_OPEN       <= pacman_mouth_open;
+  PACMAN_DIRECTION <= direction;
 
 end architecture;
 

@@ -94,10 +94,10 @@ package pacman_package is
   ------------------------------------------------------------------------------
 
   -- Intelligenza dei fantasmini
-  type ghost_direction is (UP_DIR, DOWN_DIR, LEFT_DIR, RIGHT_DIR, IDLE);
+  type character_direction is (UP_DIR, DOWN_DIR, LEFT_DIR, RIGHT_DIR, IDLE);
 
   function is_crossroad (
-    current_dir : ghost_direction;
+    current_dir : character_direction;
     can_moves   : can_move)
     return boolean;
 
@@ -106,7 +106,7 @@ package pacman_package is
     can_moves             : can_move;
     character_coordinates : cell_coordinates;
     index                 : integer)
-    return ghost_direction;
+    return character_direction;
 
 
 
@@ -136,7 +136,7 @@ package body pacman_package is
 
   -- Funzione che riconosce se i fantasmini sono in un incrocio della mappa
   function is_crossroad (
-    current_dir : ghost_direction;
+    current_dir : character_direction;
     can_moves   : can_move)
     return boolean is variable incrocio : boolean := false;
   begin  -- function is_crossroad
@@ -164,7 +164,7 @@ package body pacman_package is
     can_moves             : can_move;
     character_coordinates : cell_coordinates;
     index                 : integer)
-    return ghost_direction is variable direction : ghost_direction := IDLE;
+    return character_direction is variable direction : character_direction := IDLE;
   begin  -- function random_direction
 
     case (character_coordinates.row * random_value + character_coordinates.col * (index+1)) mod 4 is
