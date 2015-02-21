@@ -17,6 +17,8 @@ entity ImageGenerator is
     --
     MOUTH_OPEN                   : in std_logic;
     PACMAN_DIRECTION             : in character_direction;
+    --
+    CURRENT_STATE                : in state_controller_type;
 
     -- Outputs
     RED        : out std_logic_vector(3 downto 0);
@@ -85,6 +87,8 @@ begin  -- architecture RTL
 
         end if MapPixel;
 
+      elsif (is_in_message_board(ROW, COLUMN, CURRENT_STATE)) then
+        color_vector <= draw_letter_pixel(CURRENT_STATE, ROW, COLUMN);
       else
 
         color_vector <= COLOR_BLACK;

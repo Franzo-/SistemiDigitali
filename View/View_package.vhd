@@ -21,7 +21,8 @@ package view_package is
   -----------------------------------------------------------------------------
 
   -- Pixel per cella
-  constant CELL_SIZE : positive := 16;
+  constant CELL_SIZE        : positive := 16;
+  constant CELL_STRING_SIZE : positive := CELL_SIZE*2;
 
   -- Costanti della risoluzione video
   constant H_PIXELS : integer := 640;
@@ -31,13 +32,34 @@ package view_package is
   constant LEFT_MARGIN : integer := (H_PIXELS/2) - ((MAP_COLUMNS*CELL_SIZE)/2);
   constant TOP_MARGIN  : integer := (V_PIXELS/2) - ((MAP_ROWS*CELL_SIZE)/2);
 
+  -- Lunghezza massima dei messaggi testuali
+  constant MAX_MESSAGE_LENGTH : integer := 10;
+
+  -- Margini per centrare i messaggi testuali
+  constant TOP_MARGIN_MESSAGE  : integer := (TOP_MARGIN + (CELL_SIZE * MAP_ROWS)) + CELL_STRING_SIZE;
+  constant LEFT_MARGIN_MESSAGE : integer := (H_PIXELS/2) - (MAX_MESSAGE_LENGTH/2 * CELL_STRING_SIZE);
+
   -----------------------------------------------------------------------------
 
-  -- Sprite Candies
-  -- SPRITE FANTASMINI, PACMAN, CARAMELLINE, MURI
-  -- LETTERE PER LE STRINGHE
-  -- TIPO SPRITE, TIPO FONT 
+  -- TIPO FONT
+  type font_matrix is array (0 to CELL_STRING_SIZE-1) of std_logic_vector (0 to CELL_STRING_SIZE-1);
 
+  type message_type is array (0 to MAX_MESSAGE_LENGTH-1) of font_matrix;
+
+  -- Messaggi
+--  constant WIN_MESSAGE       : message_type := (space, space, space, w, i, n, space, space, space, space);
+--  constant PAUSE_MESSAGE     : message_type := (space, space, p, a, u, s, e, space, space, space);
+--  constant START_MESSAGE     : message_type := (s, t, a, r, t, space, g, a, m, e);
+--  constant GAME_OVER_MESSAGE : message_type := (g, a, m, e, space, o, v, e, r, space);
+
+  -- Lettere
+
+  --constant a : font_matrix;
+
+
+  -----------------------------------------------------------------------------
+
+  -- Tipo sprite
   type sprite_matrix is array (0 to CELL_SIZE-1) of std_logic_vector (0 to CELL_SIZE-1);
 
   constant candy : sprite_matrix := (
@@ -149,6 +171,12 @@ package view_package is
     direction : character_direction
     )
     return color_type;
+	 
+	 function draw_letter_pixel (
+    game_state : state_controller_type;
+    pixel_row  : integer;
+    pixel_col  : integer)
+    return color_type;
 
   -----------------------------------------------------------------------------
 
@@ -158,12 +186,31 @@ package view_package is
     pixel_col : integer)
     return boolean;
 
+  function is_in_message_board (
+    pixel_row  : integer;
+    pixel_col  : integer;
+    game_state : state_controller_type)
+    return boolean;
+
 
 end package;
 
 -------------------------------------------------------------------------------
 
 package body view_package is
+
+--  aLetterRow : for i in 0 to CELL_STRING_SIZE-1 generate
+--    aLetterCol : for j in 0 to CELL_STRING_SIZE-1 generate
+--      Rows : if (i = 0 or i = (CELL_STRING_SIZE-1)/2) generate
+--       -- a(i, j) := '1';
+--      end generate Rows;
+--      Cols : if (j = 0 or j = (CELL_STRING_SIZE-1)) generate
+--        --a(i, j) := '1';
+--      end generate Cols;
+--    end generate aLetterCol;
+--  end generate aLetterRow;
+
+  ------------------------------------------------------------------------------
 
   function int_to7seg(a : integer) return std_logic_vector is
     variable result : std_logic_vector(6 downto 0);
@@ -307,21 +354,21 @@ package body view_package is
   begin
 
     case direction is
-	 
-      when DOWN_DIR   =>   i := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
-									j := pixel_row mod CELL_SIZE;
-                           
-      when UP_DIR     =>   i := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
-									j := (CELL_SIZE-1) - (pixel_row mod CELL_SIZE);
-                             
-      when RIGHT_DIR  =>   i := pixel_row mod CELL_SIZE;
-                           j := pixel_col mod CELL_SIZE;
-									
-      when LEFT_DIR   =>   i := pixel_row mod CELL_SIZE;
-                           j := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
-									
+
+      when DOWN_DIR => i := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
+                       j := pixel_row mod CELL_SIZE;
+
+      when UP_DIR => i := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
+                     j := (CELL_SIZE-1) - (pixel_row mod CELL_SIZE);
+
+      when RIGHT_DIR => i := pixel_row mod CELL_SIZE;
+                        j := pixel_col mod CELL_SIZE;
+
+      when LEFT_DIR => i := pixel_row mod CELL_SIZE;
+                       j := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
+
       when others => null;
-		
+
     end case;
 
     sprite_row := sprite(i);
@@ -334,6 +381,28 @@ package body view_package is
 
     return sprite_color;
   end function get_from_pacman_sprite;
+
+  -----------------------------------------------------------------------------
+
+-- purpose: Disegna i pixel delle lettere
+  function draw_letter_pixel (
+    game_state : state_controller_type;
+    pixel_row  : integer;
+    pixel_col  : integer)
+    return color_type is variable color_vector : color_type;
+  begin
+
+
+    --if (a(pixel_row mod CELL_STRING_SIZE, pixel_col mod CELL_STRING_SIZE) = '1') then
+	 if (true) then
+      color_vector := COLOR_WHITE;
+    else
+      color_vector := COLOR_BLACK;
+    end if;
+
+
+    return color_vector;
+  end function draw_letter_pixel;
 
   -----------------------------------------------------------------------------
 
@@ -352,6 +421,30 @@ package body view_package is
 
     return in_board;
   end function is_in_board;
+
+  -----------------------------------------------------------------------------
+
+  -- purpose: Individua i pixel dei messaggi
+  function is_in_message_board (
+    pixel_row  : integer;
+    pixel_col  : integer;
+    game_state : state_controller_type)
+    return boolean is variable in_message_board : boolean := false;
+
+  begin
+
+    Rows : if (pixel_row >= TOP_MARGIN_MESSAGE and
+               pixel_row < (TOP_MARGIN_MESSAGE + CELL_STRING_SIZE)) then
+
+      Cols : if (pixel_col >= LEFT_MARGIN_MESSAGE and
+                 pixel_col < (LEFT_MARGIN_MESSAGE + (MAX_MESSAGE_LENGTH * CELL_STRING_SIZE))) then
+        in_message_board := true;
+      end if Cols;
+
+    end if Rows;
+
+    return in_message_board;
+  end function is_in_message_board;
 
 
 end package body view_package;

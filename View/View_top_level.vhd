@@ -20,6 +20,8 @@ entity ViewTopLevel is
     --
     MOUTH_OPEN                   : in std_logic;
     PACMAN_DIRECTION             : in character_direction;
+    --
+    CURRENT_STATE                : in state_controller_type;
 
     -- Outputs
     QUERY_VIEW : out cell_coordinates;
@@ -89,6 +91,7 @@ begin  -- architecture Structural
       CHARACTERS_COORDINATES_ARRAY => CHARACTERS_COORDINATES_ARRAY,
       MOUTH_OPEN                   => MOUTH_OPEN,
       PACMAN_DIRECTION             => PACMAN_DIRECTION,
+      CURRENT_STATE                => CURRENT_STATE,
       RED                          => VGA_R,
       GREEN                        => VGA_G,
       BLUE                         => VGA_B,

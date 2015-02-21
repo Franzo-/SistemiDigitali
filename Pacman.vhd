@@ -40,7 +40,6 @@ architecture RTL of Pacman is
   signal remove_candy                  : cell_coordinates;
   signal query_nearby_array            : cell_nearby_array;
   signal move_commands_array           : move_commands_array;
-  signal current_state                 : state_controller_type;
 
 --Signal Model/View
 ------------------------------------------------------------------------
@@ -64,6 +63,7 @@ architecture RTL of Pacman is
 -------------------------------------------------------------------------------
   signal mouth_open       : std_logic;
   signal pacman_direction : character_direction;
+  signal current_state    : state_controller_type;
 
 
 ------------------------------------------------------------------------
@@ -132,6 +132,7 @@ begin
       CHARACTERS_COORDINATES_ARRAY => character_coordinates_array,
       MOUTH_OPEN                   => mouth_open,
       PACMAN_DIRECTION             => pacman_direction,
+      CURRENT_STATE                => current_state,
       --
       QUERY_VIEW                   => query_view,
       HEX0                         => HEX0,
