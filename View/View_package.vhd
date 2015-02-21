@@ -302,21 +302,26 @@ package body view_package is
 
                          variable i          : integer := 0;
                          variable j          : integer := 0;
-                         variable sprite_row : std_logic_vector(15 downto 0);
-
+                         variable sprite_row : std_logic_vector(0 to CELL_SIZE -1);
 
   begin
 
     case direction is
-      when UP_DIR => j := pixel_row mod CELL_SIZE;
-                     i := pixel_col mod CELL_SIZE;
-      when DOWN_DIR => j := pixel_row mod CELL_SIZE;
-                       i := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
-      when LEFT_DIR => i := pixel_row mod CELL_SIZE;
-                       j := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
-      when RIGHT_DIR => i := pixel_row mod CELL_SIZE;
-                        j := pixel_col mod CELL_SIZE;
+	 
+      when DOWN_DIR   =>   i := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
+									j := pixel_row mod CELL_SIZE;
+                           
+      when UP_DIR     =>   i := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
+									j := (CELL_SIZE-1) - (pixel_row mod CELL_SIZE);
+                             
+      when RIGHT_DIR  =>   i := pixel_row mod CELL_SIZE;
+                           j := pixel_col mod CELL_SIZE;
+									
+      when LEFT_DIR   =>   i := pixel_row mod CELL_SIZE;
+                           j := (CELL_SIZE-1) - (pixel_col mod CELL_SIZE);
+									
       when others => null;
+		
     end case;
 
     sprite_row := sprite(i);
