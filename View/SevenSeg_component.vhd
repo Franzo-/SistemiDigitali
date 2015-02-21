@@ -1,7 +1,7 @@
 library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
-use work.view_package.all;
+use work.seven_seg_package.all;
 use work.pacman_package.all;
 
 -------------------------------------------------------------------------------
