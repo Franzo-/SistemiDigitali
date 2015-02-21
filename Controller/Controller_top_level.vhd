@@ -34,16 +34,19 @@ end entity ControllerTopLevel;
 
 architecture Structural of ControllerTopLevel is
 
-  signal can_moves_array : can_move_array;
-  signal game_over       : std_logic;
-  signal win             : std_logic;
-  signal enable          : std_logic;
-  signal timer_move      : std_logic;
-
+  signal can_moves_array  : can_move_array;
+  signal game_over        : std_logic;
+  signal win              : std_logic;
+  signal enable           : std_logic;
+  signal timer_move       : std_logic;
+  signal timer_move_ghost : std_logic;
+  
 begin  -- architecture Structural
 
   Eating_controller : entity work.Eating_controller
     port map (
+	   RESET_N                => RESET_N,
+      CLOCK            		  => CLK,
       CHARACTERS_COORDINATES => CHARACTER_COORDINATES_ARRAY,
       CANDY_LEFT             => CANDY_LEFT,
       GAME_OVER              => game_over,
@@ -98,7 +101,7 @@ begin  -- architecture Structural
       port map (
         RESET_N               => RESET_N,
         CLOCK                 => CLK,
-        TIMER_MOVE            => timer_move,
+        TIMER_MOVE            => timer_move_ghost,
         CAN_MOVES             => can_moves_array(i),
         MOVE_COMMANDS         => MOVE_COMMANDS_ARRAY(i),
         ENABLE                => enable,
@@ -133,15 +136,20 @@ begin  -- architecture Structural
     if (reset_n = '0') then
       counter    := 0;
       timer_move <= '0';
+		timer_move_ghost <= '0';
     elsif (rising_edge(CLK)) then
       if(counter = counter'high) then
         counter    := 0;
         timer_move <= '1';
+		elsif(counter = 12000000) then
+		  timer_move_ghost <= '1';
+		  counter    := counter+1;
       else
         counter    := counter+1;
         timer_move <= '0';
+		  timer_move_ghost <= '0';
       end if;
     end if;
   end process;
-
+  
 end architecture Structural;

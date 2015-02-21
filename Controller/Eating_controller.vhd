@@ -7,6 +7,8 @@ entity Eating_controller is
 
   port(
     --segnali ingresso
+	 CLOCK      : in std_logic;
+    RESET_N    : in std_logic;
     CHARACTERS_COORDINATES : in character_cell_array;
     CANDY_LEFT             : in integer;
 
@@ -40,15 +42,17 @@ begin
 --dove passa il pacman viene sempre rimossa a prescindere la caramella (se non c'e non succede nulla)
   REMOVE_CANDY <= pacman_coordinates;
 
-
 ----------------------------------------------------------------------
 
 --processo per i fantasmi----------
-  ghost_eating : process(ghost1_coordinates, ghost2_coordinates, ghost3_coordinates, ghost4_coordinates, pacman_coordinates)
+  ghost_eating : process(CLOCK, RESET_N)
 
   begin
   
+  if(RESET_N = '0') then
     GAME_OVER <= '0';
+	 
+  elsif rising_edge(CLOCK) then
 
     --confronto le coordinate del pacman con le coordinate dei fantasmi
     --genera gameover se uno dei confronti ha successo
@@ -59,41 +63,24 @@ begin
 
       GAME_OVER <= '1';
     end if;
-
-
+	 
+  end if;
   end process ghost_eating;
 
-
-------------------------------------------------------------------------
---
-----processo per il RESPONSE_CANDY----------
---      Response_candy_trigger : process(RESPONSE_CANDY) 
---      
---      --inizializzare in qualche modo il RESPONSE_CANDY??
---      begin
---      
---      --controllo se c'e caramellina in tal caso ,mando un remove candy con le stesse coordinate
---      if(RESPONSE_CANDY.is_candy = '1') then
---      REMOVE_CANDY <= pacman_coordinates;
---      
---      end if;
---      end process Response_candy_trigger;
---      
---      
---      
---      
-------------------------------------------------------------------------
-
   ------processo che si attiva ogni volta che cambia il numero delle caramelle-----
-  Candy_trigger : process (CANDY_LEFT)
+  Candy_trigger : process (CLOCK, RESET_N)
   begin
 
-    WIN <= '0';
-
-    if (CANDY_LEFT = 0) then
-      WIN <= '1';
-    end if;
-
+    if(RESET_N = '0') then
+       WIN <= '0';
+		 
+	 elsif rising_edge(CLOCK) then
+	 
+      if (CANDY_LEFT = 0) then
+			WIN <= '1';
+      end if;
+	 
+	end if;
   end process Candy_trigger;
 
 end architecture;
