@@ -45,13 +45,25 @@ package body font_package is
     return color_type is variable color_vector : color_type;
   begin
 
-
-    if (a(pixel_row mod CELL_STRING_SIZE)(pixel_col mod CELL_STRING_SIZE) = '1') then
-      color_vector := COLOR_WHITE;
-    else
-      color_vector := COLOR_BLACK;
-    end if;
-
+--	 case game_state is
+--	   when PAUSE        =>
+--		when GAME_OVER    =>
+--		when START_SCREEN =>
+--		when PLAYING      => color_vector := COLOR_BLACK;
+--		when WIN          =>
+--		when others       => color_vector := COLOR_BLACK;
+--	 end case;
+	 
+	 
+--	 if(game_state = PAUSE) then 
+--		 if (a(pixel_row mod CELL_STRING_SIZE)(pixel_col mod CELL_STRING_SIZE) = '1') then
+--			color_vector := COLOR_WHITE;
+--		 else 
+--		   color_vector := COLOR_BLACK;
+--	    end if;
+--    else
+--			color_vector := COLOR_BLACK;
+--	 end if;
 
     return color_vector;
   end function draw_letter_pixel;
