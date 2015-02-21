@@ -88,7 +88,7 @@ begin  -- architecture RTL
         end if MapPixel;
 
       elsif (is_in_message_board(ROW, COLUMN, CURRENT_STATE)) then
-        color_vector <= draw_letter_pixel(CURRENT_STATE, ROW, COLUMN);
+        color_vector <= draw_letter_pixel(CURRENT_STATE, ROW - TOP_MARGIN_MESSAGE, COLUMN - LEFT_MARGIN_MESSAGE);
       else
 
         color_vector <= COLOR_BLACK;

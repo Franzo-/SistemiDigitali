@@ -47,6 +47,7 @@ begin
   ghost_eating : process(ghost1_coordinates, ghost2_coordinates, ghost3_coordinates, ghost4_coordinates, pacman_coordinates)
 
   begin
+  
     GAME_OVER <= '0';
 
     --confronto le coordinate del pacman con le coordinate dei fantasmi

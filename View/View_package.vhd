@@ -54,7 +54,9 @@ package view_package is
 
   -- Lettere
 
-  --constant a : font_matrix;
+  function init_a (bold : integer range 0 to 5) return font_matrix;
+  constant BOLD : integer := 2;
+  constant a : font_matrix := init_a(BOLD);
 
 
   -----------------------------------------------------------------------------
@@ -393,8 +395,7 @@ package body view_package is
   begin
 
 
-    --if (a(pixel_row mod CELL_STRING_SIZE, pixel_col mod CELL_STRING_SIZE) = '1') then
-	 if (true) then
+	 if (a(pixel_row mod CELL_STRING_SIZE)( pixel_col mod CELL_STRING_SIZE) = '1') then
       color_vector := COLOR_WHITE;
     else
       color_vector := COLOR_BLACK;
@@ -445,6 +446,30 @@ package body view_package is
 
     return in_message_board;
   end function is_in_message_board;
+  
+  function init_a(bold : integer range 0 to 5) return font_matrix is 
+    variable temp : font_matrix; 
 
+    begin 
+	
+    aLetterRow : for i in 0 to (CELL_STRING_SIZE-1) loop
+     aLetterCol : for j in 0 to (CELL_STRING_SIZE-1) loop
+	  
+		  temp(i)(j) := '0';
+	  
+        if (i <= BOLD or (i <= ((CELL_STRING_SIZE-1)/2 + BOLD/2) and i >= ((CELL_STRING_SIZE-1)/2 - BOLD/2)))  then
+				if(j /= 0 and j/= CELL_STRING_SIZE-1) then
+					temp(i)(j) := '1';
+				end if;
+			end if;
+			
+        if (j <= BOLD  or (j >= (CELL_STRING_SIZE-2 - BOLD) and j<= CELL_STRING_SIZE-2) ) then
+					temp(i)(j) := '1';
+		  end if;
+    end loop aLetterCol;
+  end loop aLetterRow;
+
+  return temp;
+  end function init_a;
 
 end package body view_package;
