@@ -11,6 +11,10 @@ package font_package is
 
   type message_type is array (0 to MAX_MESSAGE_LENGTH-1) of font_matrix;
 
+  function letter_generator (
+    segments : std_logic_vector(0 to 13))  -- 14 segmenti
+    return font_matrix;
+
 -------------------------------------------------------------------------------
 -- Lettere
 
@@ -32,14 +36,6 @@ package font_package is
 -- | m        |               13 |
 -- |----------+------------------|
 -------------------------------------------------------------------------------
-  -- TODO: toglierla dopo
-  function init_a (bold : integer range 0 to 5) return font_matrix;
-
-  function letter_generator (
-    segments : std_logic_vector(0 to 13))  -- 14 segmenti
-    return font_matrix;
-
-  constant BOLD : integer := 2;
 
   constant a     : font_matrix := letter_generator("11101111000000");
   constant w     : font_matrix := letter_generator("01101100000101");
@@ -58,7 +54,6 @@ package font_package is
   constant c     : font_matrix := letter_generator("10011100000000");
   constant space : font_matrix := letter_generator("00000000000000");
 
-
   -----------------------------------------------------------------------------
 
   -- Messaggi
@@ -68,7 +63,7 @@ package font_package is
   constant GAME_OVER_MESSAGE : message_type := (g, a, m, e, space, o, v, e, r, space);
 
   -- Titolo
-  constant TITLE             : message_type := (space, space, p, a, c, m, a, n, space, space);
+  constant TITLE : message_type := (space, space, p, a, c, m, a, n, space, space);
   -----------------------------------------------------------------------------
 
   -- Sceglie il pixel dalla stringa associata allo stato di gioco
@@ -79,12 +74,12 @@ package font_package is
     return color_type;
 
   function draw_letter_title (
-    pixel_row  : integer;
-    pixel_col  : integer)
+    pixel_row : integer;
+    pixel_col : integer)
     return color_type;
 
---funzione che prende in ingresso il messaggio da visualizzare e seleziona a sua volta la lettera da stampare,
---mandandola come input della funzione get_from_letter   
+--funzione che prende in ingresso il messaggio da visualizzare e seleziona a sua volta
+--la lettera da stampare, mandandola come input della funzione get_from_letter   
   function get_from_string (
     message   : message_type;
     pixel_row : integer;
@@ -93,7 +88,8 @@ package font_package is
     return color_type;
 
 
---funzione che prende in ingresso la sprite della lettera da stampare e restituisce il colore del pixel corrente         
+--funzione che prende in ingresso la sprite della lettera da stampare e restituisce
+--il colore del pixel corrente         
   function get_from_letter(
     selected_letter : font_matrix;
     pixel_row       : integer;
@@ -108,13 +104,13 @@ end package font_package;
 
 package body font_package is
 
-	 
+
   function draw_letter_pixel (
     game_state : state_controller_type;
     pixel_row  : integer;
     pixel_col  : integer)
     return color_type is variable color_vector : color_type;
-	 
+
   begin
 
     case game_state is
@@ -130,19 +126,19 @@ package body font_package is
     return color_vector;
   end function draw_letter_pixel;
 
-   ------------------------------------------------------------------------------------
-	
+  ------------------------------------------------------------------------------------
+
   function draw_letter_title (
-    pixel_row  : integer;
-    pixel_col  : integer)
+    pixel_row : integer;
+    pixel_col : integer)
     return color_type is variable color_vector : color_type;
   begin
 
     color_vector := get_from_string(TITLE, pixel_row, pixel_col, COLOR_YELLOW);
-      
+
     return color_vector;
   end function draw_letter_title;
-  
+
   ------------------------------------------------------------------------------------
 
   function get_from_string (
@@ -188,34 +184,6 @@ package body font_package is
     return color_vector;
   end function get_from_letter;
 
-  -----------------------------------------------------------------------------
-
-  function init_a(bold : integer range 0 to 5) return font_matrix is
-    variable temp : font_matrix;
-
-  begin
-
-    aLetterRow : for i in 0 to (CELL_STRING_SIZE-1) loop
-      aLetterCol : for j in 0 to (CELL_STRING_SIZE-1) loop
-
-        temp(i)(j) := '0';
-
-        if (i <= BOLD or (i <= ((CELL_STRING_SIZE-1)/2 + BOLD/2) and i >= ((CELL_STRING_SIZE-1)/2 - BOLD/2))) then
-          if(j /= 0 and j /= CELL_STRING_SIZE-1) then
-            temp(i)(j) := '1';
-          end if;
-        end if;
-
-        if (j <= BOLD or (j >= (CELL_STRING_SIZE-2 - BOLD) and j <= CELL_STRING_SIZE-2)) then
-          temp(i)(j) := '1';
-        end if;
-      end loop aLetterCol;
-    end loop aLetterRow;
-
-    return temp;
-  end function init_a;
-
--------------------------------------------------------------------------------
 
   -----------------------------------------------------------------------------
   --       a
@@ -244,125 +212,125 @@ package body font_package is
 
     LetterRow : for row in 0 to (CELL_STRING_SIZE-1) loop
       LetterCol : for col in 0 to (CELL_STRING_SIZE-1) loop
- 
+
         letter(row)(col) := '0';
-		  
-		  if(row > 0 and row < (CELL_STRING_SIZE-1) and col>0 and col<(CELL_STRING_SIZE-1)) then 
-		  
-			  a : if (segments(0) = '1') then
-				 if (row = 1) then
-					  letter(row)(col) := '1';
-				 end if;
-			  end if a;
 
-			  b : if (segments(1) = '1') then
-				 if (row < (CELL_STRING_SIZE-1)/2) then
-					if (col = CELL_STRING_SIZE-2) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if b;
+        if(row > 0 and row < (CELL_STRING_SIZE-1) and col > 0 and col < (CELL_STRING_SIZE-1)) then
 
-			  c : if (segments(2) = '1') then
-				 if (row >= (CELL_STRING_SIZE-1)/2) then
-					if (col = CELL_STRING_SIZE-2) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if c;
+          a : if (segments(0) = '1') then
+            if (row = 1) then
+              letter(row)(col) := '1';
+            end if;
+          end if a;
 
-			  d : if (segments(3) = '1') then
-				 if (row = CELL_STRING_SIZE-2) then
-					  letter(row)(col) := '1';
-				 end if;
-			  end if d;
+          b : if (segments(1) = '1') then
+            if (row < (CELL_STRING_SIZE-1)/2) then
+              if (col = CELL_STRING_SIZE-2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if b;
 
-			  e : if (segments(4) = '1') then
-				 if (row >= (CELL_STRING_SIZE-1)/2) then
-					if (col = 1) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if e;
+          c : if (segments(2) = '1') then
+            if (row >= (CELL_STRING_SIZE-1)/2) then
+              if (col = CELL_STRING_SIZE-2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if c;
 
-			  f : if (segments(5) = '1') then
-				 if (row < (CELL_STRING_SIZE-1)/2) then
-					if (col = 1) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if f;
+          d : if (segments(3) = '1') then
+            if (row = CELL_STRING_SIZE-2) then
+              letter(row)(col) := '1';
+            end if;
+          end if d;
 
-			  g1 : if (segments(6) = '1') then
-				 if (row = (CELL_STRING_SIZE-1)/2) then
-					if (col < (CELL_STRING_SIZE-1)/2) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if g1;
+          e : if (segments(4) = '1') then
+            if (row >= (CELL_STRING_SIZE-1)/2) then
+              if (col = 1) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if e;
 
-			  g2 : if (segments(7) = '1') then
-				 if (row = (CELL_STRING_SIZE-1)/2) then
-					if (col > (CELL_STRING_SIZE-1)/2) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if g2;
+          f : if (segments(5) = '1') then
+            if (row < (CELL_STRING_SIZE-1)/2) then
+              if (col = 1) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if f;
 
-			  h : if (segments(8) = '1') then
-				 if (row <= (CELL_STRING_SIZE-1)/2) then
-					if ( col = row  and 
-						  col < (CELL_STRING_SIZE-1)/2) then
-				    	  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if h;
-			  
+          g1 : if (segments(6) = '1') then
+            if (row = (CELL_STRING_SIZE-1)/2) then
+              if (col < (CELL_STRING_SIZE-1)/2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if g1;
 
-			  i : if (segments(9) = '1') then
-				 if (row < (CELL_STRING_SIZE-1)/2) then
-					if (col = (CELL_STRING_SIZE-1)/2) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if i;
+          g2 : if (segments(7) = '1') then
+            if (row = (CELL_STRING_SIZE-1)/2) then
+              if (col > (CELL_STRING_SIZE-1)/2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if g2;
 
-			  j : if (segments(10) = '1') then
-				 if (row <= (CELL_STRING_SIZE-1)/2) then
-					if ( col = (CELL_STRING_SIZE-1) - row and
-						  col >= (CELL_STRING_SIZE-1)/2) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if j;
+          h : if (segments(8) = '1') then
+            if (row <= (CELL_STRING_SIZE-1)/2) then
+              if (col = row and
+                  col < (CELL_STRING_SIZE-1)/2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if h;
 
-			  k : if (segments(11) = '1') then
-				 if (row >= (CELL_STRING_SIZE-1)/2) then
-					if ( col = (CELL_STRING_SIZE-1) - row and 
-						  col <= (CELL_STRING_SIZE+1)/2) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if k;
-			  
-			  l : if (segments(12) = '1') then
-				 if (row >= (CELL_STRING_SIZE-1)/2) then
-					if (col = (CELL_STRING_SIZE-1)/2) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if l;
 
-			  m : if (segments(13) = '1') then
-				 if (row >= (CELL_STRING_SIZE-1)/2) then
-					if (  col = row and
-						  col >= (CELL_STRING_SIZE-1)/2) then
-					  letter(row)(col) := '1';
-					end if;
-				 end if;
-			  end if m;
-		  
-	 end if;
+          i : if (segments(9) = '1') then
+            if (row < (CELL_STRING_SIZE-1)/2) then
+              if (col = (CELL_STRING_SIZE-1)/2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if i;
+
+          j : if (segments(10) = '1') then
+            if (row <= (CELL_STRING_SIZE-1)/2) then
+              if (col = (CELL_STRING_SIZE-1) - row and
+                  col >= (CELL_STRING_SIZE-1)/2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if j;
+
+          k : if (segments(11) = '1') then
+            if (row >= (CELL_STRING_SIZE-1)/2) then
+              if (col = (CELL_STRING_SIZE-1) - row and
+                  col <= (CELL_STRING_SIZE+1)/2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if k;
+
+          l : if (segments(12) = '1') then
+            if (row >= (CELL_STRING_SIZE-1)/2) then
+              if (col = (CELL_STRING_SIZE-1)/2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if l;
+
+          m : if (segments(13) = '1') then
+            if (row >= (CELL_STRING_SIZE-1)/2) then
+              if (col = row and
+                  col >= (CELL_STRING_SIZE-1)/2) then
+                letter(row)(col) := '1';
+              end if;
+            end if;
+          end if m;
+
+        end if;
       end loop LetterCol;
     end loop LetterRow;
 

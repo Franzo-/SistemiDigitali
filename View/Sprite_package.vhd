@@ -159,18 +159,14 @@ package body sprite_package is
     )
     return color_type is variable sprite_color : color_type := COLOR_BLACK;
 
-                         variable i          : integer := 0;
-                         variable j          : integer := 0;
-                         variable sprite_row : std_logic_vector(15 downto 0);
-
+                         variable i : integer := 0;
+                         variable j : integer := 0;
 
   begin
     i := pixel_row mod CELL_SIZE;
     j := pixel_col mod CELL_SIZE;
 
-    sprite_row := sprite(i);
-
-    if(sprite_row(j) = '0') then
+    if(sprite(i)(j) = '0') then
       sprite_color := COLOR_BLACK;
     else
       sprite_color := color;

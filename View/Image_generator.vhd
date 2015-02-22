@@ -21,8 +21,8 @@ entity ImageGenerator is
     PACMAN_DIRECTION             : in character_direction;
     --
     CURRENT_STATE                : in state_controller_type;
-	 --
-	 TIMER_BLINKING					: in std_logic;
+    --
+    TIMER_BLINKING               : in std_logic;
 
     -- Outputs
     RED        : out std_logic_vector(3 downto 0);
@@ -42,7 +42,7 @@ architecture RTL of ImageGenerator is
 begin  -- architecture RTL
 
   -- Colora l'immagine pixel per pixel
-  ImagePixeling : process (DISP_ENABLE, ROW, COLUMN, CELL_CONTENT, CHARACTERS_COORDINATES_ARRAY, MOUTH_OPEN, PACMAN_DIRECTION, CURRENT_STATE)
+  ImagePixeling : process (DISP_ENABLE, ROW, COLUMN, CELL_CONTENT, CHARACTERS_COORDINATES_ARRAY, MOUTH_OPEN, PACMAN_DIRECTION, CURRENT_STATE, TIMER_BLINKING)
 
     variable tmp_character : character_cell_type;
     variable is_map_pixel  : boolean;
@@ -92,11 +92,15 @@ begin  -- architecture RTL
 
         end if MapPixel;
 
+      -- Messaggio sotto la board
       elsif (is_in_message_board(ROW, COLUMN, CURRENT_STATE) and TIMER_BLINKING = '1') then
         color_vector := draw_letter_pixel(CURRENT_STATE, ROW - TOP_MARGIN_MESSAGE, COLUMN - LEFT_MARGIN_MESSAGE);
+
+      -- Titolo sopra la board
       elsif (is_in_title(ROW, COLUMN)) then
-		  color_vector := draw_letter_title(ROW - TOP_MARGIN_TITLE, COLUMN - LEFT_MARGIN_TITLE);
-		else
+        color_vector := draw_letter_title(ROW - TOP_MARGIN_TITLE, COLUMN - LEFT_MARGIN_TITLE);
+
+      else
         color_vector := COLOR_BLACK;
 
       end if BoardPixel;
