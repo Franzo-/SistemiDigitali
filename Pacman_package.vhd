@@ -5,8 +5,8 @@ use ieee.std_logic_1164.all;
 package pacman_package is
 
   -- Constants
-  constant MAP_COLUMNS          : positive := 15;  -- cells
-  constant MAP_ROWS             : positive := 15;  -- cells
+  constant MAP_COLUMNS          : positive := 19;  -- cells
+  constant MAP_ROWS             : positive := 19;  -- cells
   constant NUMBER_OF_CHARACTERS : positive := 5;   -- pacman + ghosts
 
   -----------------------------------------------------------------------------

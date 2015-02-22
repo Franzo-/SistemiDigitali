@@ -38,6 +38,10 @@ package view_package is
   -- Margini per centrare i messaggi testuali
   constant TOP_MARGIN_MESSAGE  : integer := (TOP_MARGIN + (CELL_SIZE * MAP_ROWS)) + CELL_STRING_SIZE;
   constant LEFT_MARGIN_MESSAGE : integer := (H_PIXELS/2) - (MAX_MESSAGE_LENGTH/2 * CELL_STRING_SIZE);
+  
+  -- Margini per centrare il titolo
+  constant TOP_MARGIN_TITLE : integer := TOP_MARGIN - (CELL_STRING_SIZE + CELL_STRING_SIZE/2);
+  constant LEFT_MARGIN_TITLE : integer := (H_PIXELS/2) - (MAX_MESSAGE_LENGTH/2 * CELL_STRING_SIZE);
 
   -----------------------------------------------------------------------------
 
@@ -52,6 +56,11 @@ package view_package is
     pixel_row  : integer;
     pixel_col  : integer;
     game_state : state_controller_type)
+    return boolean;
+	 
+  function is_in_title (
+    pixel_row  : integer;
+    pixel_col  : integer)
     return boolean;
 
 end package;
@@ -98,5 +107,27 @@ package body view_package is
 
     return in_message_board;
   end function is_in_message_board;
+  
+   -----------------------------------------------------------------------------
+	
+    function is_in_title (
+		pixel_row  : integer;
+		pixel_col  : integer)
+		return boolean is variable in_title : boolean := false;
+	 
+	 begin
+	 
+	   Rows : if (pixel_row >= TOP_MARGIN_TITLE and
+               pixel_row < (TOP_MARGIN_TITLE + CELL_STRING_SIZE)) then
+
+      Cols : if (pixel_col >= LEFT_MARGIN_TITLE and
+                 pixel_col < (LEFT_MARGIN_TITLE + (MAX_MESSAGE_LENGTH * CELL_STRING_SIZE))) then
+        in_title := true;
+      end if Cols;
+
+    end if Rows;
+
+	     return in_title;
+  end function is_in_title;
 
 end package body view_package;

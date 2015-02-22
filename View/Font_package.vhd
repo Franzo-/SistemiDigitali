@@ -55,6 +55,7 @@ package font_package is
   constant m     : font_matrix := letter_generator("01101100101000");
   constant v     : font_matrix := letter_generator("00001100001100");
   constant o     : font_matrix := letter_generator("11111100000000");
+  constant c     : font_matrix := letter_generator("10011100000000");
   constant space : font_matrix := letter_generator("00000000000000");
 
 
@@ -66,6 +67,8 @@ package font_package is
   constant START_MESSAGE     : message_type := (s, t, a, r, t, space, g, a, m, e);
   constant GAME_OVER_MESSAGE : message_type := (g, a, m, e, space, o, v, e, r, space);
 
+  -- Titolo
+  constant TITLE             : message_type := (space, space, p, a, c, m, a, n, space, space);
   -----------------------------------------------------------------------------
 
   -- Sceglie il pixel dalla stringa associata allo stato di gioco
@@ -75,6 +78,10 @@ package font_package is
     pixel_col  : integer)
     return color_type;
 
+  function draw_letter_title (
+    pixel_row  : integer;
+    pixel_col  : integer)
+    return color_type;
 
 --funzione che prende in ingresso il messaggio da visualizzare e seleziona a sua volta la lettera da stampare,
 --mandandola come input della funzione get_from_letter   
@@ -101,11 +108,13 @@ end package font_package;
 
 package body font_package is
 
+	 
   function draw_letter_pixel (
     game_state : state_controller_type;
     pixel_row  : integer;
     pixel_col  : integer)
     return color_type is variable color_vector : color_type;
+	 
   begin
 
     case game_state is
@@ -121,6 +130,19 @@ package body font_package is
     return color_vector;
   end function draw_letter_pixel;
 
+   ------------------------------------------------------------------------------------
+	
+  function draw_letter_title (
+    pixel_row  : integer;
+    pixel_col  : integer)
+    return color_type is variable color_vector : color_type;
+  begin
+
+    color_vector := get_from_string(TITLE, pixel_row, pixel_col, COLOR_YELLOW);
+      
+    return color_vector;
+  end function draw_letter_title;
+  
   ------------------------------------------------------------------------------------
 
   function get_from_string (

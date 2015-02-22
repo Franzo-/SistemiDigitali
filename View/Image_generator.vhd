@@ -21,6 +21,8 @@ entity ImageGenerator is
     PACMAN_DIRECTION             : in character_direction;
     --
     CURRENT_STATE                : in state_controller_type;
+	 --
+	 TIMER_BLINKING					: in std_logic;
 
     -- Outputs
     RED        : out std_logic_vector(3 downto 0);
@@ -90,10 +92,11 @@ begin  -- architecture RTL
 
         end if MapPixel;
 
-      elsif (is_in_message_board(ROW, COLUMN, CURRENT_STATE)) then
+      elsif (is_in_message_board(ROW, COLUMN, CURRENT_STATE) and TIMER_BLINKING = '1') then
         color_vector := draw_letter_pixel(CURRENT_STATE, ROW - TOP_MARGIN_MESSAGE, COLUMN - LEFT_MARGIN_MESSAGE);
-      else
-
+      elsif (is_in_title(ROW, COLUMN)) then
+		  color_vector := draw_letter_title(ROW - TOP_MARGIN_TITLE, COLUMN - LEFT_MARGIN_TITLE);
+		else
         color_vector := COLOR_BLACK;
 
       end if BoardPixel;
