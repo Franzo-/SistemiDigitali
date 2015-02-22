@@ -30,13 +30,8 @@ begin
 
         -- Assegna l'enumerativo a seconda del valore dell'indice i
         characters_cells(i).cell_character <= character_type'val(i);
-
-        CoordinatesReset : if (characters_cells(i).cell_character = PACMAN_CHAR) then
-          characters_cells(i).coordinates <= PACMAN_RESET_POS;
-        else
-          characters_cells(i).coordinates <= GHOSTS_RESET_POS;
-        end if CoordinatesReset;
-
+		  characters_cells(i).coordinates <= RESET_POS(i);
+		  
       end loop ResetLoop;
 
     elsif (rising_edge(CLOCK)) then     -- rising clock edge
