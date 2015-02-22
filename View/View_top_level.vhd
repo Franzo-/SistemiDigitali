@@ -46,9 +46,6 @@ architecture Structural of ViewTopLevel is
   signal column      : integer;
   signal row         : integer;
 
-  signal n_blank : std_logic;           -- unused
-  signal n_sync  : std_logic;           -- unused
-
 begin  -- architecture Structural
 
   VGA_Controller : entity work.vga_controller
@@ -75,8 +72,8 @@ begin  -- architecture Structural
       disp_ena  => disp_enable,
       column    => column,
       row       => row,
-      n_blank   => n_blank,             -- unused
-      n_sync    => n_sync               -- unused
+      n_blank   => open,                -- unused
+      n_sync    => open                 -- unused
 
       );
 
