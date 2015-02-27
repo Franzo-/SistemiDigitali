@@ -1,6 +1,5 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
 use work.pacman_package.all;
 use work.controller_package.all;
 

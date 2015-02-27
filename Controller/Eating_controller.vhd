@@ -1,14 +1,13 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
 use work.pacman_package.all;
 
 entity Eating_controller is
 
   port(
     --segnali ingresso
-	 CLOCK      : in std_logic;
-    RESET_N    : in std_logic;
+    CLOCK                  : in std_logic;
+    RESET_N                : in std_logic;
     CHARACTERS_COORDINATES : in character_cell_array;
     CANDY_LEFT             : in integer;
 
@@ -48,23 +47,23 @@ begin
   ghost_eating : process(CLOCK, RESET_N)
 
   begin
-  
-  if(RESET_N = '0') then
-    GAME_OVER <= '0';
-	 
-  elsif rising_edge(CLOCK) then
 
-    --confronto le coordinate del pacman con le coordinate dei fantasmi
-    --genera gameover se uno dei confronti ha successo
-    if (ghost1_coordinates = pacman_coordinates or
-        ghost2_coordinates = pacman_coordinates or
-        ghost3_coordinates = pacman_coordinates or
-        ghost4_coordinates = pacman_coordinates) then
+    if(RESET_N = '0') then
+      GAME_OVER <= '0';
 
-      GAME_OVER <= '1';
+    elsif rising_edge(CLOCK) then
+
+      --confronto le coordinate del pacman con le coordinate dei fantasmi
+      --genera gameover se uno dei confronti ha successo
+      if (ghost1_coordinates = pacman_coordinates or
+          ghost2_coordinates = pacman_coordinates or
+          ghost3_coordinates = pacman_coordinates or
+          ghost4_coordinates = pacman_coordinates) then
+
+        GAME_OVER <= '1';
+      end if;
+
     end if;
-	 
-  end if;
   end process ghost_eating;
 
   ------processo che si attiva ogni volta che cambia il numero delle caramelle-----
@@ -72,15 +71,15 @@ begin
   begin
 
     if(RESET_N = '0') then
-       WIN <= '0';
-		 
-	 elsif rising_edge(CLOCK) then
-	 
+      WIN <= '0';
+
+    elsif rising_edge(CLOCK) then
+
       if (CANDY_LEFT = 0) then
-			WIN <= '1';
+        WIN <= '1';
       end if;
-	 
-	end if;
+
+    end if;
   end process Candy_trigger;
 
 end architecture;

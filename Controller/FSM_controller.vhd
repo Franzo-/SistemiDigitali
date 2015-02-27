@@ -1,5 +1,4 @@
 library ieee;
-use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 use work.pacman_package.all;
 
@@ -28,78 +27,78 @@ end entity;
 architecture my_FSM_Controller of FSM_Controller is
 
 
-  signal state : state_controller_type;
+  signal state      : state_controller_type;
   signal next_state : state_controller_type;
-  
+
 
 begin
 
-	CURRENT_STATE  <= state; --assegnamento concorrente
+  CURRENT_STATE <= state;               --assegnamento concorrente
 
 
--------------------------------------------------------	
-	State_update : process (CLOCK, RESET_N)
-	begin
-		if (RESET_N = '0') then
-			state <= START_SCREEN;
-		elsif rising_edge(CLOCK) then
-			state<= next_state;
-			
-		end if;
-	end process;
-	
+------------------------------------------------------- 
+  State_update : process (CLOCK, RESET_N)
+  begin
+    if (RESET_N = '0') then
+      state <= START_SCREEN;
+    elsif rising_edge(CLOCK) then
+      state <= next_state;
+
+    end if;
+  end process;
+
 -------------------------------------------------------
-	
-	OutputAndNextState : process(state, BUTTON_DOWN,BUTTON_LEFT,BUTTON_RIGHT,BUTTON_UP,PAUSE_SIGNAL,WIN_SIGNAL,GAME_OVER_SIGNAL)
-	begin
 
-		ENABLE_CONTROLLER <= '0';
-		next_state <= state;
+  OutputAndNextState : process(state, BUTTON_DOWN, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_UP, PAUSE_SIGNAL, WIN_SIGNAL, GAME_OVER_SIGNAL)
+  begin
 
-      case (state) is
+    ENABLE_CONTROLLER <= '0';
+    next_state        <= state;
 
-        --nella schermata iniziale l'automa è sensibile alla pressione dei tasti direzionali
-        when START_SCREEN =>
-				ENABLE_CONTROLLER <= '0';
-				
-          if (BUTTON_DOWN = '1' or BUTTON_UP = '1'
-              or BUTTON_LEFT = '1' or BUTTON_RIGHT = '1') then
-					next_state  <= PLAYING;
+    case (state) is
 
-          end if;
+      --nella schermata iniziale l'automa è sensibile alla pressione dei tasti direzionali
+      when START_SCREEN =>
+        ENABLE_CONTROLLER <= '0';
 
-        when PLAYING =>
-				ENABLE_CONTROLLER <= '1';
-          --durante il gioco, l'automa cambia stato se viene premuto il tasto di pausa, se il pacman 
-          -- collide con un fantasma, o se abbiamo finito le caramelle
-          if(PAUSE_SIGNAL = '1') then
-            next_state  <= PAUSE;
+        if (BUTTON_DOWN = '1' or BUTTON_UP = '1'
+            or BUTTON_LEFT = '1' or BUTTON_RIGHT = '1') then
+          next_state <= PLAYING;
 
-          elsif (WIN_SIGNAL = '1') then
-            next_state  <= WIN;
-           
-          elsif (GAME_OVER_SIGNAL = '1') then
-            next_state   <= GAME_OVER;
+        end if;
 
-          end if;
+      when PLAYING =>
+        ENABLE_CONTROLLER <= '1';
+        --durante il gioco, l'automa cambia stato se viene premuto il tasto di pausa, se il pacman 
+        -- collide con un fantasma, o se abbiamo finito le caramelle
+        if(PAUSE_SIGNAL = '1') then
+          next_state <= PAUSE;
 
-        when PAUSE =>
-            ENABLE_CONTROLLER <= '0';        -- durante la pausa per ricominciare a giocare basta disattivare l'interruttore 
-                                         -- sulla FPGA (PAUSE_SIGNAL ='0')
-          if(PAUSE_SIGNAL = '0') then
-            next_state  <= PLAYING;
-          
-          end if;
+        elsif (WIN_SIGNAL = '1') then
+          next_state <= WIN;
 
-        when WIN | GAME_OVER =>
+        elsif (GAME_OVER_SIGNAL = '1') then
+          next_state <= GAME_OVER;
+
+        end if;
+
+      when PAUSE =>
+        ENABLE_CONTROLLER <= '0';  -- durante la pausa per ricominciare a giocare basta disattivare l'interruttore 
+                                   -- sulla FPGA (PAUSE_SIGNAL ='0')
+        if(PAUSE_SIGNAL = '0') then
+          next_state <= PLAYING;
+
+        end if;
+
+      when WIN | GAME_OVER =>
                                         --win e game over saranno molto simili: si resetta allo stato iniziale con la pressione del reset
                                         --e inviano semplicemente l'enumerativo alla view. stoppiamo tutti i movimenti
-          ENABLE_CONTROLLER <= '0';
+        ENABLE_CONTROLLER <= '0';
 
-      end case;
+    end case;
 
   end process;
 
--------------------------------------------------------	
+------------------------------------------------------- 
 
 end architecture;

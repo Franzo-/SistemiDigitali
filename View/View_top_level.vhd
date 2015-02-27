@@ -1,7 +1,6 @@
 -- TOP LEVEL VIEW
 
 library ieee;
-use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 use work.pacman_package.all;
 use work.view_package.all;
@@ -42,9 +41,9 @@ end entity ViewTopLevel;
 
 architecture Structural of ViewTopLevel is
 
-  signal disp_enable : std_logic;
-  signal column      : integer;
-  signal row         : integer;
+  signal disp_enable    : std_logic;
+  signal column         : integer;
+  signal row            : integer;
   signal timer_blinking : std_logic;
 
 begin  -- architecture Structural
@@ -94,7 +93,7 @@ begin  -- architecture Structural
       GREEN                        => VGA_G,
       BLUE                         => VGA_B,
       QUERY_CELL                   => QUERY_VIEW,
-		TIMER_BLINKING               => timer_blinking
+      TIMER_BLINKING               => timer_blinking
       );
 
   -----------------------------------------------------------------------------
@@ -107,8 +106,8 @@ begin  -- architecture Structural
       HEX2       => HEX2,
       HEX3       => HEX3
       );
-		
-		
+
+
 -----------------------------------------------------------------------------
 
 -- Impulso ogni quarto di secondo
@@ -116,20 +115,20 @@ begin  -- architecture Structural
     variable counter : integer range 0 to (12500000-1);
   begin
     if (reset_n = '0') then
-      counter    := 0;
+      counter        := 0;
       timer_blinking <= '0';
     elsif (rising_edge(CLOCK)) then
-      if(counter = counter'high ) then
-        counter    := 0;
-		elsif (counter <= 5000000) then
-		  counter    := counter+1;
-		  timer_blinking<= '1';
+      if(counter = counter'high) then
+        counter := 0;
+      elsif (counter <= 5000000) then
+        counter        := counter+1;
+        timer_blinking <= '1';
       else
-        counter    := counter+1;
+        counter        := counter+1;
         timer_blinking <= '0';
       end if;
     end if;
   end process;
-  
+
 
 end architecture Structural;
