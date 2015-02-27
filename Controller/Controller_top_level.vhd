@@ -4,6 +4,7 @@ library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 use work.pacman_package.all;
+use work.controller_package.all;
 
 entity ControllerTopLevel is
   port (
@@ -40,13 +41,13 @@ architecture Structural of ControllerTopLevel is
   signal enable           : std_logic;
   signal timer_move       : std_logic;
   signal timer_move_ghost : std_logic;
-  
+
 begin  -- architecture Structural
 
   Eating_controller : entity work.Eating_controller
     port map (
-	   RESET_N                => RESET_N,
-      CLOCK            		  => CLK,
+      RESET_N                => RESET_N,
+      CLOCK                  => CLK,
       CHARACTERS_COORDINATES => CHARACTER_COORDINATES_ARRAY,
       CANDY_LEFT             => CANDY_LEFT,
       GAME_OVER              => game_over,
@@ -134,22 +135,22 @@ begin  -- architecture Structural
     variable counter : integer range 0 to (12500000-1);
   begin
     if (reset_n = '0') then
-      counter    := 0;
-      timer_move <= '0';
-		timer_move_ghost <= '0';
+      counter          := 0;
+      timer_move       <= '0';
+      timer_move_ghost <= '0';
     elsif (rising_edge(CLK)) then
       if(counter = counter'high) then
         counter    := 0;
         timer_move <= '1';
-		elsif(counter = 12000000) then
-		  timer_move_ghost <= '1';
-		  counter    := counter+1;
+      elsif(counter = 12000000) then
+        timer_move_ghost <= '1';
+        counter          := counter+1;
       else
-        counter    := counter+1;
-        timer_move <= '0';
-		  timer_move_ghost <= '0';
+        counter          := counter+1;
+        timer_move       <= '0';
+        timer_move_ghost <= '0';
       end if;
     end if;
   end process;
-  
+
 end architecture Structural;

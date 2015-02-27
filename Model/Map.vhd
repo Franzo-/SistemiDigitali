@@ -2,6 +2,7 @@ library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 use work.pacman_package.all;
+use work.model_package.all;
 
 entity MapEntity is
   port
@@ -52,23 +53,23 @@ begin
         for j in 0 to MAP_COLUMNS-1 loop
 
           selected_cell := map_board(i, j);
-			 
-			 if(MAPPA(i)(j) = '1') then
-				selected_cell.is_wall  := '1';
-				selected_cell.is_candy := '0';
-			 else
-				if(i = RESET_POS(0).row and j = RESET_POS(0).col) then
-					selected_cell.is_wall  := '0';
-				   selected_cell.is_candy := '0';
-				else 
-					selected_cell.is_wall  := '0';
-					selected_cell.is_candy := '1';
-					accumulator_candy      := accumulator_candy + 1;
-				
-				end if;
-		    end if;
-			 
---			   Estensione mappa
+
+          if(MAPPA(i)(j) = '1') then
+            selected_cell.is_wall  := '1';
+            selected_cell.is_candy := '0';
+          else
+            if(i = RESET_POS(0).row and j = RESET_POS(0).col) then
+              selected_cell.is_wall  := '0';
+              selected_cell.is_candy := '0';
+            else
+              selected_cell.is_wall  := '0';
+              selected_cell.is_candy := '1';
+              accumulator_candy      := accumulator_candy + 1;
+
+            end if;
+          end if;
+
+--                         Estensione mappa
 --
 --          if ((i = 0) or (j = 0) or (i = (MAP_ROWS -1)) or (j = (MAP_COLUMNS - 1))) then
 --            selected_cell.is_candy := '0';

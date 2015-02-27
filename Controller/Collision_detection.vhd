@@ -2,17 +2,18 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 use work.pacman_package.all;
+use work.controller_package.all;
 
 entity CollisionDetection is
   port (
     -- Input
     CHARACTER_COORDINATES : in cell_coordinates;
-    RESPONSE             : in cell_nearby_content;
+    RESPONSE              : in cell_nearby_content;
 
     -- Output
-    QUERY          : out cell_nearby;
-	 CAN_MOVES      : out can_move
-	 
+    QUERY     : out cell_nearby;
+    CAN_MOVES : out can_move
+
     );
 end CollisionDetection;
 
@@ -23,12 +24,12 @@ begin
   ResponseChanged : process (RESPONSE)
   begin
 
-    CAN_MOVES.can_move_up <= '1';
-	 CAN_MOVES.can_move_down <= '1';
-	 CAN_MOVES.can_move_left <= '1';
-	 CAN_MOVES.can_move_right <= '1';
-	 
-    
+    CAN_MOVES.can_move_up    <= '1';
+    CAN_MOVES.can_move_down  <= '1';
+    CAN_MOVES.can_move_left  <= '1';
+    CAN_MOVES.can_move_right <= '1';
+
+
     if(RESPONSE.cell_up_content.is_wall = '1') then
       CAN_MOVES.can_move_up <= '0';
     else

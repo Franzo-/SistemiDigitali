@@ -2,6 +2,7 @@ library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 use work.pacman_package.all;
+use work.model_package.all;
 
 entity MovingParts is
 
@@ -30,8 +31,8 @@ begin
 
         -- Assegna l'enumerativo a seconda del valore dell'indice i
         characters_cells(i).cell_character <= character_type'val(i);
-		  characters_cells(i).coordinates <= RESET_POS(i);
-		  
+        characters_cells(i).coordinates    <= RESET_POS(i);
+
       end loop ResetLoop;
 
     elsif (rising_edge(CLOCK)) then     -- rising clock edge

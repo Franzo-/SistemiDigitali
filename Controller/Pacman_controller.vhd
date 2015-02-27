@@ -2,7 +2,7 @@ library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 use work.pacman_package.all;
-
+use work.controller_package.all;
 
 entity Pacman_controller is
   port
