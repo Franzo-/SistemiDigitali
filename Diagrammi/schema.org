@@ -1,175 +1,299 @@
-#+begin_src ditaa :file controller.png
+#+begin_src ditaa :file candy_counter.png
 
-
-
-
-  +------------+
-  |            |     clock_FPGA
-  |            <----------------------
-  |    PLL     |
-  |            |     clock_movimento
-  |            +--------------------->
-  |            |
-  +------------+
-
-
-  +---------------------------+
-  |                           |    clock_movimento
-  |                           <---------------------------
-  |                           |    reset
-  |   Pacman controller       <---------------------------
-  |                           |    button (4 direzioni)
-  |                           <---------------------------
-  |                           |    can_moves (4)         
-  |                           <---------------------------
-  |                           |    enable            
-  |                           <---------------------------
-  |                           |    move_commands (4)
-  |                           +-------------------------->
-  |                           |
-  +---------------------------+
-
-  +---------------------------+
-  |                           |     character_coordinates
-  |                           <-----------------------------------
-  |                           |     response (contenuto celle)
-  |                           <-----------------------------------
-  |    Collision detection    |
-  |                           |
-  |                           |
-  | (per ogni personaggio)    |
-  |                           |     query (sul contenuto celle)
-  |                           +---------------------------------->
-  |      (COMBINATORIO)       |     can_move (4 direzioni)
-  |                           +---------------------------------->
-  |                           |
-  |                           |
-  +---------------------------+
-
-  +---------------------------+
-  |                           |     characters_coordinates(5)
-  |                           <-------------------------------------------
-  |                           |     candy_left           
-  |                           <-------------------------------------------
-  |                           |
-  |    Eating controller      |
-  |                           |
-  |                           |     win                               
-  |                           +------------------------------------------>
-  |                           |     game_over
-  |                           +------------------------------------------>
-  |                           |     remove_candy
-  |                           +------------------------------------------>
-  |                           |
-  +---------------------------+
-
-  +---------------------------+
-  |                           |     can_move (4 direzioni)
-  |                           <--------------------------------
-  |                           |
-  |    Intelligenza           |     clock_movimento
-  |    fantasmini             <--------------------------------
-  |                           |
-  | (per ogni fantasmino)     |     enable
-  |                           <--------------------------------
-  |                           |     move (4 direzioni)
-  |                           +------------------------------->
-  |                           |
-  +---------------------------+
-
-  +---------------------------+
-  |                           |     reset
-  |                           <--------------------------------
-  |                           |     pausa
-  |                           <--------------------------------
-  |                           |     input direzionali        
-  |                           <--------------------------------
-  |    Automa a stati         |     game_over
-  |                           <--------------------------------
-  |                           |     win
-  |                           <--------------------------------
-  |                           |
-  |                           |     current_state 
-  |                           +------------------------------->
-  |                           |     enable_controller                        
-  |                           +------------------------------->
-  |                           |
-  +---------------------------+
-
+                 /-------------------\
+                 |                   |
+                 |   CANDYCOUNTER    |
+  candy_removal  |                   |
+  --------------->enable             |    candy_left
+  candy_number   |             count +-------------->
+  --------------->load               |
+  clock          |                   |
+  --------------->clock              |
+                 |                   |
+                 |     reset_n       |
+                 \--------^----------/
+                          |
+                          |
+                          |
+                          | reset_n
+                          |
+                          |
+                          |
 #+end_src
 
 #+RESULTS:
-[[file:controller.png]]
+[[file:candy_counter.png]]
 
-
-#+begin_src ditaa :file model.png
-
-
-
-
-  +--------------------------------------------------+
-  |                                                  |      query_nearby(5)
-  |                                                  <----------------------------------
-  |                  Mappa                           |
-  |                                                  |
-  |                                                  |      query_view
-  |    +-------------------+           |             <----------------------------------
-  |    |                   |           |             |
-  |    |                   |    enable |             |      remove_candy
-  |    |   CandyCounter    <-----------+             <----------------------------------
-  |    |                   |                         |                                  
-  |    |                   |    count                |       candy_left
-  |    |                   +------------------------->---------------------------------->
-  |    |                   |                         |
-  |    |                   |                         |       response_nearby(5)
-  |    |                   |    reset_n              +---------------------------------->
-  |    |                   <--------------------+    |
-  |    |                   |                    |    |
-  |    +-------------------+                    |    |       response_view
-  |                                             |    +---------------------------------->
-  |                                             |    |
-  |                                             |    |
-  |                                             |    |
-  |                                             |    |
-  |                                             |    |          reset_n
-  |                                             +----<------------------------------------
-  |                                                  |
-  +--------------------------------------------------+
+#+begin_src ditaa :file map.png :cmdline -r
 
 
 
-
-
-
-  +---------+
-  |         |   move_commands(5)   
-  |  Parti  <-------------------------------
-  |  mobili |   characters_coordinates(5)
-  |         +------------------------------>
-  |         |
-  +---------+
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                         +--------------------------------------------+
+                         |                                            |
+                         |                   MAP                      |
+                         |                                            |
+                         |                                            |
+       ------------------> clock                    response_nearby   +------------------>
+                         |                                            |
+                         |                          response_view     +------------------>
+                         |                                            |
+       ------------------> query_nearby             candy_left        +------------------>
+                         |                                            |
+       ------------------> query_view                                 |
+                         |                                            |
+       ------------------> remove_candy                               |
+                         |                                            |
+                         |                                            |
+                         |                                            |
+                         |                                            |
+                         |                  reset_n                   |
+                         +----------------------^---------------------+
+                                                |
+                                                |
+                                                |
+                                                |
+                                                |
 
 
 #+end_src
 
 #+RESULTS:
-[[file:model.png]]
+[[file:map.png]]
+
+
+#+begin_src ditaa :file moving_parts.png :cmdline -r
+
+                        +----------------------------------------+
+                        |              MOVING_PARTS              |
+                        |                                        |
+                        |                                        |
+                        |                                        |
+                        |                                        |
+          --------------> move_commands    character_coordinates +--------------->
+                        |                                        |
+                        |                                        |
+          --------------> clock                                  |
+                        |                                        |
+                        |                                        |
+                        |                reset_n                 |
+                        +--------------------^-------------------+
+                                             |
+                                             |
+                                             |
+                                             |
+                                             |
+
+
+#+end_src
+
+#+RESULTS:
+[[file:moving_parts.png]]
+
+
+#+begin_src ditaa :file pacman_controller.png :cmdline -r
+
+                     +-----------------------------------------------+
+                     |                PACMAN CONTROLLER              |
+                     |                                               |
+                     |                                               |
+          -----------> enable                       move_commands    +--------------->
+                     |                                               |
+          -----------> timer_move                   mouth_open       +--------------->
+                     |                                               |
+          -----------> buttons (4)                  pacman_direction +--------------->
+                     |                                               |
+          -----------> can_moves                                     |
+                     |                                               |   
+                     |                                               |
+                     |                                               |
+          -----------> clock                                         |
+                     |                                               |
+                     |                   reset_n                     |
+                     +-----------------------^-----------------------+
+                                             |
+                                             |
+                                             |
+                                             |
+
+
+#+end_src
+
+#+RESULTS:
+[[file:pacman_controller.png]]
+
+
+#+begin_src ditaa :file collision_detection.png :cmdline -r
+
+               +----------------------------------------------+
+               |              COLLISION DETECTION             |
+               |                                              |
+               |                                              |
+    -----------> character_coordinates            query       +---------->
+               |                                              |
+               |                                              |
+    -----------> response                         can_moves   +---------->
+               |                                              |
+               |                                              |
+               +----------------------------------------------+
+
+#+end_src
+
+#+RESULTS:
+[[file:collision_detection.png]]
+
+
+#+begin_src ditaa :file eating_controller.png :cmdline -r
+                 +-----------------------------------------------+
+                 |                EATING CONTROLLER              |
+                 |                                               |
+                 |                                               |
+      -----------> character_coordinates           game_over     +---------->
+                 |                                               |
+      -----------> candy_left                      win           +---------->
+                 |                                               |
+                 |                                 remove_candy  +---------->
+      -----------> clock                                         |
+                 |                    reset_n                    |
+                 +-----------------------^-----------------------+
+                                         |
+                                         |
+                                         |
+                                         |
+#+end_src
+
+#+RESULTS:
+[[file:eating_controller.png]]
+
+
+#+begin_src ditaa :file IA_ghosts.png :cmdline -r
+
+               +-------------------------------------------------------+
+               |                       IA GHOSTS                       |
+               |                                                       |
+               |                                                       |
+     ----------> enable                                  move_commands +--------->
+               |                                                       |
+     ----------> timer_move                                            |
+               |                                                       |
+     ----------> character_coordinates                                 |
+               |                                                       |
+     ----------> can_moves                                             |
+               |                                                       |
+               |                                                       |
+     ----------> clock                                                 |
+               |                         reset_n                       |
+               +----------------------------^--------------------------+
+                                            |
+                                            |
+                                            |
+                                            |
+#+end_src
+
+#+RESULTS:
+[[file:IA_ghosts.png]]
+
+
+#+begin_src ditaa :file fsm_controller.png :cmdline -r
+
+            +----------------------------------------------------+
+            |                    FSM CONTROLLER                  |
+            |                                                    |
+            |                                                    |
+   ---------> pause_signal                     enable_controller +----------->
+            |                                                    |
+   ---------> game_over_signal                 current_state     +----------->
+            |                                                    |
+   ---------> win_signal                                         |
+            |                                                    |
+   ---------> buttons (4)                                        |
+            |                                                    |
+            |                                                    |
+   ---------> clock                                              |
+            |                        reset_n                     |
+            +---------------------------^------------------------+
+                                        |
+                                        |
+                                        |
+                                        |
+#+end_src
+
+#+RESULTS:
+[[file:fsm_controller.png]]
+
+
+#+begin_src ditaa :file seven_segments.png :cmdline -r
+             +----------------------------------+
+             |           SEVEN SEGMENTS         |
+             |                                  |
+             |                             hex0 +---------->
+             |                                  |
+             |                             hex1 +---------->
+  -----------> candy_left                       |
+             |                             hex2 +---------->
+             |                                  |
+             |                             hex3 +---------->
+             |                                  |
+             +----------------------------------+
+#+end_src
+
+#+RESULTS:
+[[file:seven_segments.png]]
+
+
+#+begin_src ditaa :file image_generator.png :cmdline -r
+                +------------------------------------------------------+
+                |                    IMAGE GENERATOR                   |
+                |                                                      |
+     -----------> disp_enable                                          |
+                |                                                      |
+     -----------> row                                                  |
+                |                                                      |
+     -----------> col                                       red        +---------->
+                |                                                      |
+     -----------> cell_content                              green      +---------->
+                |                                                      |
+     -----------> characters_coordinates_array              blue       +---------->
+                |                                                      |
+     -----------> mouth_open                                query_cell +---------->
+                |                                                      |
+     -----------> pacman_direction                                     |
+                |                                                      |
+     -----------> current_state                                        |
+                |                                                      |
+     -----------> timer_blinking                                       |
+                |                                                      |
+                +------------------------------------------------------+
+#+end_src
+
+#+RESULTS:
+[[file:image_generator.png]]
+
+
+#+begin_src ditaa :file vga_controller.png :cmdline -r
+               +--------------------------------------+
+               |           VGA CONTROLLER             |
+               |                                      |
+               |                             h_sync   +------------->
+               |                                      |
+               |                             v_sync   +------------->
+               |                                      |
+       --------> pixel_clk                   disp_ena +------------->
+               |                                      |
+               |                             column   +------------->
+               |                                      |
+               |                             row      +------------->
+               |                                      |
+               |                                      |
+               |               reset_n                |
+               +------------------^-------------------+
+                                  |
+                                  |
+                                  |
+                                  |
+
+
+#+end_src
+
+#+RESULTS:
+[[file:vga_controller.png]]
 
