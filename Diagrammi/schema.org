@@ -1,3 +1,95 @@
+#+begin_src ditaa :file model.png
+               +---------------------------------------------------------+
+               |                     MODEL TOP LEVEL                     |
+               |                                                         |
+     ----------> query_nearby_array          response_nearby_array       +--------->
+               |                                                         |
+     ----------> query_view                  response_view               +--------->
+               |                                                         |
+     ----------> remove_candy                candy_left                  +--------->
+               |                                                         |
+     ----------> move_commands_array         character_coordinates_array +--------->
+               |                                                         |
+               |                                                         |
+     ----------> clock                                                   |
+               |                                                         |
+               |                         reset_n                         |
+               +----------------------------^----------------------------+
+                                            |
+                                            |
+                                            |
+                                            |
+
+#+end_src
+
+#+RESULTS:
+[[file:model.png]]
+
+#+begin_src ditaa :file controller.png
+                  +-----------------------------------------------------+
+                  |               CONTROLLER TOP LEVEL                  |
+                  |                                                     |
+                  |                                                     |
+       -----------> buttons (4)                     remove_candy        +---------->
+                  |                                                     |
+       -----------> pause                           query_nearby_array  +---------->
+                  |                                                     |
+       -----------> candy_left                      move_commands_array +---------->
+                  |                                                     |
+       -----------> character_coordinates_array     current_state       +---------->
+                  |                                                     |
+       -----------> response_nearby_array           mouth_open          +---------->
+                  |                                                     |
+                  |                                 pacman_direction    +---------->
+       -----------> clock                                               |
+                  |                                                     |
+                  |                       reset_n                       |
+                  +--------------------------^--------------------------+
+                                             |
+                                             |
+                                             |
+
+#+end_src
+
+#+RESULTS:
+[[file:controller.png]]
+
+
+#+begin_src ditaa :file view.png
+                 +------------------------------------------------------+
+                 |                      VIEW TOP LEVEL                  |
+                 |                                                      |
+       ----------> candy_left                                query_view +---------->
+                 |                                                      |
+       ----------> response_view                             hex0       +---------->
+                 |                                                      |
+       ----------> characters_coordinates_array              hex1       +---------->
+                 |                                                      |
+       ----------> mouth_open                                hex2       +---------->
+                 |                                                      |
+       ----------> pacman_direction                          hex3       +---------->
+                 |                                                      |
+       ----------> current_state                             h_sync     +---------->
+                 |                                                      |
+                 |                                           v_sync     +---------->
+                 |                                                      |
+                 |                                           vga_r      +---------->
+                 |                                                      |
+                 |                                           vga_g      +---------->
+       ----------> clock                                                |
+                 |                                           vga_b      +---------->
+                 |                                                      |
+                 |                          reset_n                     |
+                 +-----------------------------^------------------------+
+                                               |
+                                               |
+                                               |
+                                               |
+#+end_src
+
+#+RESULTS:
+[[file:view.png]]
+
 #+begin_src ditaa :file candy_counter.png
 
                  /-------------------\
